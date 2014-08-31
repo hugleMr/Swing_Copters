@@ -1,35 +1,13 @@
-cb.MainMenuScene = cc.Layer.extend({
+cb.MainMenuScene = cb.GameScene.extend({
     ctor:function() {
         this._super();
 
         this._initializeBackground();
-        this._initializeAnimatedObstacles();
+        this._initializeGrounds();
+        this._createClouds([ cc.p(300, 600), cc.p(150, 400) ]);
+        this._createObstacles(this.getContentSize().width/2, 500);
         this._initializeAnimatedTitleSprite();
         this._initializeMenuButtons();
-    },
-
-    _initializeBackground:function() {
-        var backgroundSprite = new cc.Sprite("images/background1.png");
-        backgroundSprite.setPosition(cc.p(this.getContentSize().width / 2,
-                                          this.getContentSize().height / 2));
-        this.addChild(backgroundSprite);
-
-        var cloudPositions = [ cc.p(300, 600), cc.p(150, 400) ];
-        for (var i = 0; i < cloudPositions.length; i++) {
-            var cloudSprite = new cc.Sprite("images/cloud1.png");
-            cloudSprite.setPosition(cloudPositions[i]);
-            this.addChild(cloudSprite);
-        }
-
-        var buildingsSprite = new cc.Sprite("images/buildings.png");
-        buildingsSprite.setPosition(cc.p(this.getContentSize().width / 2,
-                                         buildingsSprite.getContentSize().height / 2));
-        this.addChild(buildingsSprite);
-
-        var groundSprite = new cc.Sprite("images/ground.png");
-        groundSprite.setPosition(cc.p(this.getContentSize().width / 2,
-                                      groundSprite.getContentSize().height / 2));
-        this.addChild(groundSprite);
     },
 
     _initializeAnimatedTitleSprite:function() {
@@ -58,36 +36,6 @@ cb.MainMenuScene = cc.Layer.extend({
         moveAnimationActions.push(cc.DelayTime.create(moveDelay));
 
         animatedSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(moveAnimationActions)));
-    },
-
-    _initializeAnimatedObstacles:function() {
-        var platformPositions = [ cc.p(-100, 500), cc.p(530, 500) ];
-        for (var i = 0; i < platformPositions.length; i++) {
-            var platformSprite = new cc.Sprite("images/platform.png");
-            platformSprite.setPosition(platformPositions[i]);
-            this.addChild(platformSprite);
-        }
-
-        var hammerPositions = [ cc.p(79, 480), cc.p(352, 480) ];
-        for (var i = 0; i < hammerPositions.length; i++) {
-            var hammerSprite = new cc.Sprite("images/hammer.png");
-            hammerSprite.setPosition(hammerPositions[i]);
-            this.addChild(hammerSprite);
-
-            // FIXME: fix this lame animation!!!
-            var rotateActions = [];
-            var rotationAngle = 30;
-            var rotationDuration = 1, rotationDelay = 0.2;
-
-            hammerSprite.setAnchorPoint(cc.p(0.5, 1));
-            hammerSprite.setRotation(rotationAngle);
-
-            rotateActions.push(cc.RotateBy.create(rotationDuration, -rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            rotateActions.push(cc.RotateBy.create(rotationDuration, rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            hammerSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(rotateActions)));
-        }
     },
 
     _initializeMenuButtons:function() {
