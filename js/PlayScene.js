@@ -161,11 +161,43 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
     _hideAnimationDidEnd:function() {
         var expectedAnimation = 2;
         if (++this._animationCount == expectedAnimation)
-            ;//this._playScene.setState(new cb.PlayScene.State.Playing(this._playScene));
+            this._playScene.setState(new cb.PlayScene.State.Playing(this._playScene));
     },
 
     onExit:function() {
         this._playScene.removeChild(this._getReadySprite);
         this._playScene.removeChild(this._tapToPlaySprite);
+    }
+});
+
+cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
+    _scoreSprite : null,
+
+    onEnter:function() {
+        this._animateShowScore();
+    },
+
+    _animateShowScore:function() {
+        this._scoreSprite = new cb.ScoreSprite();
+        this._playScene.addChild(this._scoreSprite);
+        this._scoreSprite.setPosition(cc.p(this._playScene.getContentSize().width/2, 600));
+
+        var animationDuration = 1;
+        var delayTillPlayDuration = 0.5;
+        var animationActions = [];
+        animationActions.push(cc.FadeIn.create(animationDuration));
+        animationActions.push(cc.DelayTime.create(delayTillPlayDuration));
+        animationActions.push(cc.CallFunc.create(this._startPlaying, this));
+
+        this._scoreSprite.setOpacity(0);
+        this._scoreSprite.runAction(cc.Sequence.create(animationActions));
+    },
+
+    _startPlaying:function() {
+        this._playScene.setTouchEnabled(true);
+    },
+
+    handleTouchBegan:function(touch, event) {
+
     }
 });
