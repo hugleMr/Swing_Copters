@@ -15,6 +15,11 @@ cb.resources.rate_button = "rate_button";
 cb.resources.rate_button_selected = "rate_button_selected";
 cb.resources.leaderboard_button = "leaderboard_button";
 cb.resources.leaderboard_button_selected = "leaderboard_button_selected";
+cb.resources.player1 = "player1";
+cb.resources.player1_blink = "player1_blink";
+cb.resources.player_copter = "copter";
+cb.resources.tap_to_play = "tap_to_play";
+cb.resources.get_ready = "get_ready";
 
 (function() {
     for (var name in cb.resources)
@@ -30,7 +35,7 @@ window.onload = function(){
         cc.LoaderScene.preload([cb.resources.atlas_plist, cb.resources.atlas], function () {
             cc.spriteFrameCache.addSpriteFrames(cb.resources.atlas_plist, cb.resources.atlas);
 
-            cc.director.runScene(cb.MainMenuScene.create());
+            cc.director.runScene(cb.PlayScene.create());
         }, this);
     };
     cc.game.run("gameCanvas");
