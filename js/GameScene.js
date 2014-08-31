@@ -12,19 +12,19 @@ cb.GameScene = cc.Layer.extend({
     },
 
     _initializeBackground:function() {
-        var backgroundSprite = new cc.Sprite("images/background1.png");
+        var backgroundSprite = cc.Sprite.create(cb.resources.background1);
         backgroundSprite.setPosition(cc.p(this.getContentSize().width / 2,
             this.getContentSize().height / 2));
         this._backgroundLayer.addChild(backgroundSprite);
     },
 
     _initializeGrounds:function() {
-        var buildingsSprite = new cc.Sprite("images/buildings.png");
+        var buildingsSprite = cc.Sprite.create(cb.resources.buildings);
         buildingsSprite.setPosition(cc.p(this.getContentSize().width / 2,
             buildingsSprite.getContentSize().height / 2));
         this._scrollLayer.addChild(buildingsSprite);
 
-        var groundSprite = new cc.Sprite("images/ground.png");
+        var groundSprite = cc.Sprite.create(cb.resources.ground);
         groundSprite.setPosition(cc.p(this.getContentSize().width / 2,
             groundSprite.getContentSize().height / 2));
         this._scrollLayer.addChild(groundSprite);
@@ -32,7 +32,7 @@ cb.GameScene = cc.Layer.extend({
 
     _createClouds:function(cloudPositions) {
         for (var i = 0; i < cloudPositions.length; i++) {
-            var cloudSprite = new cc.Sprite("images/cloud1.png");
+            var cloudSprite = cc.Sprite.create(cb.resources.cloud1);
             cloudSprite.setPosition(cloudPositions[i]);
             this._scrollLayer.addChild(cloudSprite);
         }
@@ -43,7 +43,7 @@ cb.GameScene = cc.Layer.extend({
         var gapWidth = 222;
         var platformPositions = [ cc.p(x - gapWidth/2, y), cc.p(x + gapWidth/2, y) ];
         for (var i = 0; i < platformPositions.length; i++) {
-            var platformSprite = new cc.Sprite("images/platform.png");
+            var platformSprite = cc.Sprite.create(cb.resources.platform);
             var platformPosition = cc.p(platformPositions[i].x, platformPositions[i].y);
             platformPosition.x += (i ? 1 : -1) * platformSprite.getContentSize().width/2;
             platformSprite.setPosition(platformPosition);
@@ -54,7 +54,7 @@ cb.GameScene = cc.Layer.extend({
         var hammerPositions = [ cc.p(platformPositions[0].x - platformEdgeToHammerPivotDistance, y - 20),
                                 cc.p(platformPositions[1].x + platformEdgeToHammerPivotDistance, y - 20) ];
         for (var i = 0; i < hammerPositions.length; i++) {
-            var hammerSprite = new cc.Sprite("images/hammer.png");
+            var hammerSprite = cc.Sprite.create(cb.resources.hammer);
             hammerSprite.setPosition(hammerPositions[i]);
             this.addChild(hammerSprite);
 
