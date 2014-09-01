@@ -1,12 +1,17 @@
 cb.Player = cc.Node.extend({
     _playerSprite : null,
     _copterSprite : null,
+    _xVelocity : null,
+    _xAcceleration : null,
 
     ctor:function() {
         this._super();
 
         this._createPlayerSprite();
         this._createCopterSprite();
+
+        this._xVelocity = 0;
+        this._xAcceleration = 10;
     },
 
     _createPlayerSprite:function() {
@@ -37,5 +42,19 @@ cb.Player = cc.Node.extend({
     _startAnimateCopterSprite:function() {
         var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.player_copter, 0.15, true);
         this._copterSprite.runAction(spriteAnimationAction);
+    },
+
+    flipHorizontal:function() {
+        this._playerSprite.setFlippedX(!this._playerSprite.isFlippedX());
+        this._xAcceleration *= -1;
+    },
+
+    update:function(dt) {
+        this._super(dt);
+
+        this._xVelocity += this._xAcceleration;
+        var position = this.getPosition();
+        position.x += this._xVelocity * dt;
+        this.setPosition(position);
     }
 });

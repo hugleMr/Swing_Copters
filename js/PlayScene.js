@@ -240,17 +240,18 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     handleTouchBegan:function(touch, event) {
-
+        this._playScene._player.flipHorizontal();
     },
 
     handleUpdate:function(dt) {
         this._updateObjectPositions(dt);
+        this._playScene._player.update(dt);
         this._removeOffscreenObjects();
         this._checkRespawn();
     },
 
     _updateObjectPositions:function(dt) {
-        var gravity = 50;
+        var gravity = 100;
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         for (var i = 0; i < scrollObjects.length; i++) {
             var obj = scrollObjects[i];
