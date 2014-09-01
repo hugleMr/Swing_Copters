@@ -1,5 +1,6 @@
 cb.ScoreSprite = cc.Node.extend({
     _opacity : 255,
+    _score : 0,
 
     ctor:function(score) {
         this._super();
@@ -8,6 +9,10 @@ cb.ScoreSprite = cc.Node.extend({
     },
 
     setScore:function(score) {
+        if (this._score == score)
+            return;
+        this._score = score;
+
         this.removeAllChildren();
 
         var distanceBetweenDigitSprites = 4;
@@ -29,6 +34,10 @@ cb.ScoreSprite = cc.Node.extend({
             digitSprite.setPosition(cc.p(x + digitSprite.getContentSize().width / 2, 0));
             x += digitSprite.getContentSize().width + distanceBetweenDigitSprites;
         }
+    },
+
+    getScore:function() {
+        return this._score;
     },
 
     _createDigitSprite:function(n) {

@@ -51,5 +51,9 @@ cb.Obstacle = cc.Node.extend({
             rotateActions.push(cc.DelayTime.create(rotationDelay));
             hammerSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(rotateActions)));
         }
+    },
+
+    getMaxY:function() {
+        return this.getPositionY() + this._platformSprites[0].getContentSize().height / 2;
     }
 });

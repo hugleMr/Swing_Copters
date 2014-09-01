@@ -182,12 +182,13 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
 cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     _scoreSprite : null,
     _topCloud : null,
-    _topObstacle : null,
+    _unscoredObstacles : null,
 
     onEnter:function() {
+        this._unscoredObstacles = [];
+
         this._generateNextClouds();
         this._generateNextObstacles();
-
         this._animateShowScore();
     },
 
@@ -209,12 +210,17 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var obstacleYDistance = 350, firstObstacleY = 1000;
 
         var obstacleX = this._playScene.getContentSize().width/2;
-        var obstacleY = this._topObstacle ? this._topObstacle.getPositionY() + obstacleYDistance : firstObstacleY;
+        var obstacleY = this._unscoredObstacles.length ? this._topObstacle().getPositionY() + obstacleYDistance : firstObstacleY;
 
         for (var i = 0; i < 2; i++) {
-            this._topObstacle = this._playScene._createObstacle(cc.p(obstacleX, obstacleY));
+            var obstacle = this._playScene._createObstacle(cc.p(obstacleX, obstacleY));
+            this._unscoredObstacles.push(obstacle);
             obstacleY += obstacleYDistance;
         }
+    },
+
+    _topObstacle:function() {
+        return this._unscoredObstacles.slice(-1)[0];
     },
 
     _animateShowScore:function() {
@@ -246,8 +252,15 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     handleUpdate:function(dt) {
         this._updateObjectPositions(dt);
         this._playScene._player.update(dt);
-        this._removeOffscreenObjects();
-        this._checkRespawn();
+
+        if (this._checkPlayerDead()) {
+            console.log("dead");
+        }
+        else {
+            this._checkUpdateScore();
+            this._removeOffscreenObjects();
+            this._checkRespawn();
+        }
     },
 
     _updateObjectPositions:function(dt) {
@@ -259,6 +272,33 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
             p.y -= gravity * dt;
             obj.setPosition(p);
         }
+    },
+
+    _checkPlayerDead:function() {
+        return this._checkPlayerHitScreenEdge();
+    },
+
+    _checkPlayerHitScreenEdge:function() {
+        var player = this._playScene._player;
+        var playerX = player.getPositionX();
+        var playerWidth = player.getContentSize().width;
+        var playerMinX = playerX - playerWidth/2;
+        var playerMaxX = playerX + playerWidth/2;
+        return playerMinX <= 0 || playerMaxX >= this._playScene.getContentSize().width;
+    },
+
+    _checkUpdateScore:function() {
+        var player = this._playScene._player;
+        var obstacle = this._unscoredObstacles[0];
+        var shouldUpdateScore = player.getMinY() > obstacle.getMaxY();
+        if (shouldUpdateScore) {
+            this._unscoredObstacles.splice(0, 1);
+            this._incrementScore();
+        }
+    },
+
+    _incrementScore:function() {
+        this._scoreSprite.setScore(this._scoreSprite.getScore() + 1);
     },
 
     _removeOffscreenObjects:function() {
@@ -290,7 +330,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
 
     _checkObstaclesRespawn:function() {
         var obstacleRespawnYThreshold = 1000;
-        if (this._topObstacle.getPositionY() < obstacleRespawnYThreshold)
+        if (this._topObstacle().getPositionY() < obstacleRespawnYThreshold)
             this._generateNextObstacles();
     }
 });

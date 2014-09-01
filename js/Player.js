@@ -1,3 +1,6 @@
+(function() {
+var playerCopterDistance = 2;
+
 cb.Player = cc.Node.extend({
     _playerSprite : null,
     _copterSprite : null,
@@ -22,7 +25,7 @@ cb.Player = cc.Node.extend({
     _createCopterSprite:function() {
         this._copterSprite = cc.Sprite.create(cb.resources.player_copter + "_01");
         this.addChild(this._copterSprite);
-        this._copterSprite.setPosition(cc.p(0, this._playerSprite.getContentSize().height/2 + 2 + this._copterSprite.getContentSize().height/2));
+        this._copterSprite.setPosition(cc.p(0, this._playerSprite.getContentSize().height/2 + playerCopterDistance + this._copterSprite.getContentSize().height/2));
     },
 
     startAnimating:function() {
@@ -56,5 +59,17 @@ cb.Player = cc.Node.extend({
         var position = this.getPosition();
         position.x += this._xVelocity * dt;
         this.setPosition(position);
+    },
+
+    getContentSize:function() {
+        var size = cc.p(0, 0);
+        size.width = Math.max(this._playerSprite.getContentSize().width, this._copterSprite.getContentSize().width);
+        size.height = this._playerSprite.getContentSize().height + playerCopterDistance + this._copterSprite.getContentSize().width;
+        return size;
+    },
+
+    getMinY:function() {
+        return this.getPositionX() - this._playerSprite.getContentSize().height/2;
     }
 });
+}());
