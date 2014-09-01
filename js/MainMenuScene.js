@@ -5,7 +5,7 @@ cb.MainMenuScene = cb.GameScene.extend({
         this._initializeBackground();
         this._initializeGrounds();
         this._createClouds([ cc.p(300, 600), cc.p(150, 400) ]);
-        this._createObstacles(this.getContentSize().width/2, 500);
+        this._createObstacle(cc.p(this.getContentSize().width/2, 500));
         this._initializeAnimatedTitleSprite();
         this._initializeMenuButtons();
     },
@@ -15,12 +15,8 @@ cb.MainMenuScene = cb.GameScene.extend({
         this.addChild(animatedSprite);
         animatedSprite.setPosition(cc.p(this.getContentSize().width / 2, 520));
 
-        var spriteAnimation = cc.Animation.create();
-        spriteAnimation.setDelayPerUnit(0.15);
-        for (var i = 1; i <= 4; i++)
-            spriteAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(cb.resources.swing_copters_title.substr(1) + "_0" + i));
-
-        animatedSprite.runAction(cc.RepeatForever.create(cc.Animate.create(spriteAnimation)));
+        var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.swing_copters_title, 0.15, true);
+        animatedSprite.runAction(spriteAnimationAction);
 
         var moveAnimationActions = [];
         var moveDistance = cc.p(0, -8), negativeMoveDistance = cc.p(-moveDistance.x, -moveDistance.y);

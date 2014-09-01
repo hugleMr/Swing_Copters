@@ -31,47 +31,29 @@ cb.GameScene = cc.Layer.extend({
     },
 
     _createClouds:function(cloudPositions) {
+        var cloudSprites = [];
         for (var i = 0; i < cloudPositions.length; i++) {
             var cloudSprite = cc.Sprite.create(cb.resources.cloud1);
+            cloudSprite.setZOrder(0);
             cloudSprite.setPosition(cloudPositions[i]);
             this._scrollLayer.addChild(cloudSprite);
+            cloudSprites.push(cloudSprite);
         }
+        return cloudSprites;
     },
 
     // x is the x coordinate of the middle point of the 'gap'
-    _createObstacles:function(x, y) {
-        var gapWidth = 222;
-        var platformPositions = [ cc.p(x - gapWidth/2, y), cc.p(x + gapWidth/2, y) ];
-        for (var i = 0; i < platformPositions.length; i++) {
-            var platformSprite = cc.Sprite.create(cb.resources.platform);
-            var platformPosition = cc.p(platformPositions[i].x, platformPositions[i].y);
-            platformPosition.x += (i ? 1 : -1) * platformSprite.getContentSize().width/2;
-            platformSprite.setPosition(platformPosition);
-            this.addChild(platformSprite);
-        }
+    _createObstacle:function(position) {
+        var obstacle = new cb.Obstacle();
+        obstacle.setZOrder(1);
+        obstacle.setPosition(position);
+        this._scrollLayer.addChild(obstacle);
+        return obstacle;
+    },
 
-        var platformEdgeToHammerPivotDistance = 26;
-        var hammerPositions = [ cc.p(platformPositions[0].x - platformEdgeToHammerPivotDistance, y - 20),
-                                cc.p(platformPositions[1].x + platformEdgeToHammerPivotDistance, y - 20) ];
-        for (var i = 0; i < hammerPositions.length; i++) {
-            var hammerSprite = cc.Sprite.create(cb.resources.hammer);
-            hammerSprite.setPosition(hammerPositions[i]);
-            this.addChild(hammerSprite);
-
-            // FIXME: fix this lame animation!!!
-            var rotateActions = [];
-            var rotationAngle = 30;
-            var rotationDuration = 1, rotationDelay = 0.2;
-
-            hammerSprite.setAnchorPoint(cc.p(0.5, 1));
-            hammerSprite.setRotation(rotationAngle);
-
-            rotateActions.push(cc.RotateBy.create(rotationDuration, -rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            rotateActions.push(cc.RotateBy.create(rotationDuration, rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            hammerSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(rotateActions)));
-        }
-
+    _removeScrollObject:function(object) {
+        this._scrollLayer.removeChild(object);
     }
 });
+
+cb.GameScene.ScrollObjectTag = { Cloud : 100, Obstacle : 101 };

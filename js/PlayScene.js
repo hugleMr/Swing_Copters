@@ -9,7 +9,7 @@ cb.PlayScene = cb.GameScene.extend({
 
         this._initializeBackground();
         this._initializeGrounds();
-        this._createClouds([ cc.p(300, 600), cc.p(150, 400) ]);
+        this._createClouds([ cc.p(150, 400), cc.p(300, 600), cc.p(150, 800), cc.p(300, 1000) ]);
         this._createPlayer();
 
         this.setState(new cb.PlayScene.State.TapToPlay(this));
@@ -52,6 +52,11 @@ cb.PlayScene = cb.GameScene.extend({
 
     handleTouchBegan:function(touch, event) {
         this._state.handleTouchBegan(touch, event);
+    },
+
+    update:function(dt) {
+        this._super(dt);
+        this._state.handleUpdate(dt);
     }
 });
 
@@ -78,6 +83,10 @@ cb.PlayScene.State = cc.Class.extend({
     },
 
     handleTouchBegan:function(touch, event) {
+
+    },
+
+    handleUpdate:function(dt) {
 
     }
 });
@@ -172,9 +181,40 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
 
 cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     _scoreSprite : null,
+    _topCloud : null,
+    _topObstacle : null,
 
     onEnter:function() {
+        this._generateNextClouds();
+        this._generateNextObstacles();
+
         this._animateShowScore();
+    },
+
+    _generateNextClouds:function() {
+        var cloudXs = [ 150, 300 ];
+        var cloudYDistance = 200, firstCloudY = 1200;
+
+        var cloudY = this._topCloud ? this._topCloud.getPositionY() + cloudYDistance : firstCloudY;
+        var cloudPositions = [];
+        for (var i = 0; i < 4; i++) {
+            cloudPositions.push(cc.p(cloudXs[i % 2], cloudY));
+            cloudY += cloudYDistance;
+        }
+
+        this._topCloud = this._playScene._createClouds(cloudPositions).slice(-1)[0];
+    },
+
+    _generateNextObstacles:function() {
+        var obstacleYDistance = 350, firstObstacleY = 1000;
+
+        var obstacleX = this._playScene.getContentSize().width/2;
+        var obstacleY = this._topObstacle ? this._topObstacle.getPositionY() + obstacleYDistance : firstObstacleY;
+
+        for (var i = 0; i < 2; i++) {
+            this._topObstacle = this._playScene._createObstacle(cc.p(obstacleX, obstacleY));
+            obstacleY += obstacleYDistance;
+        }
     },
 
     _animateShowScore:function() {
@@ -194,10 +234,62 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _startPlaying:function() {
+        this._playScene._player.startAnimating();
         this._playScene.setTouchEnabled(true);
+        this._playScene.scheduleUpdate();
     },
 
     handleTouchBegan:function(touch, event) {
 
+    },
+
+    handleUpdate:function(dt) {
+        this._updateObjectPositions(dt);
+        this._removeOffscreenObjects();
+        this._checkRespawn();
+    },
+
+    _updateObjectPositions:function(dt) {
+        var gravity = 50;
+        var scrollObjects = this._playScene._scrollLayer.getChildren();
+        for (var i = 0; i < scrollObjects.length; i++) {
+            var obj = scrollObjects[i];
+            var p = obj.getPosition();
+            p.y -= gravity * dt;
+            obj.setPosition(p);
+        }
+    },
+
+    _removeOffscreenObjects:function() {
+        var removeYThreshold = -100;
+        var scrollObjects = this._playScene._scrollLayer.getChildren();
+        var toBeRemovedObjects = [];
+        for (var i = 0; i < scrollObjects.length; i++) {
+            var obj = scrollObjects[i];
+            if (obj.getPosition().y + obj.getContentSize().height/2 < removeYThreshold)
+                toBeRemovedObjects.push(obj);
+        }
+
+        var self = this;
+        $.each(toBeRemovedObjects, function(index, obj) {
+            self._playScene._removeScrollObject(obj);
+        });
+    },
+
+    _checkRespawn:function() {
+        this._checkCloudsRespawn();
+        this._checkObstaclesRespawn();
+    },
+
+    _checkCloudsRespawn:function() {
+        var cloudRespawnYThreshold = 1000;
+        if (this._topCloud.getPositionY() < cloudRespawnYThreshold)
+            this._generateNextClouds();
+    },
+
+    _checkObstaclesRespawn:function() {
+        var obstacleRespawnYThreshold = 1000;
+        if (this._topObstacle.getPositionY() < obstacleRespawnYThreshold)
+            this._generateNextObstacles();
     }
 });

@@ -17,9 +17,20 @@ cb.resources.leaderboard_button = "leaderboard_button";
 cb.resources.leaderboard_button_selected = "leaderboard_button_selected";
 cb.resources.player1 = "player1";
 cb.resources.player1_blink = "player1_blink";
+cb.resources.player1_idle = "player1_idle";
 cb.resources.player_copter = "copter";
 cb.resources.tap_to_play = "tap_to_play";
 cb.resources.get_ready = "get_ready";
+cb.resources.zero = "zero";
+cb.resources.one = "one";
+cb.resources.two = "two";
+cb.resources.three = "three";
+cb.resources.four = "four";
+cb.resources.five = "five";
+cb.resources.six = "six";
+cb.resources.seven = "seven";
+cb.resources.eight = "eight";
+cb.resources.nine = "nine";
 
 (function() {
     for (var name in cb.resources)
