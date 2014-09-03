@@ -1,12 +1,12 @@
 cb.Obstacle = cc.Node.extend({
     _platformSprites : null,
-    _hammerSprites : null,
+    _hammers : null,
 
     ctor:function() {
         this._super();
 
         this._createPlatformSprites();
-        this._createHammerSprites();
+        this._createHammers();
     },
 
     _createPlatformSprites:function() {
@@ -23,37 +23,36 @@ cb.Obstacle = cc.Node.extend({
         }
     },
 
-    _createHammerSprites:function() {
-        this._hammerSprites = [];
-        var hammerY = -20;
+    _createHammers:function() {
+        this._hammers = [];
         var platformEdgeToHammerPivotDistance = 26;
 
         for (var i = 0; i < this._platformSprites.length; i++) {
-            var hammerSprite = cc.Sprite.create(cb.resources.hammer);
+
+            var hammer = new cb.Hammer();
             var hammerX = this._platformSprites[i].getPosition().x;
             hammerX += (i ? -1 : 1) * this._platformSprites[i].getContentSize().width/2; // count toward edges
             hammerX += (i ? 1 : -1) * platformEdgeToHammerPivotDistance; // take into account the distance to pivot
-            hammerSprite.setPosition(cc.p(hammerX, hammerY));
-            this.addChild(hammerSprite);
-            this._hammerSprites.push(hammerSprite);
-
-            // FIXME: fix this lame animation!!!
-            var rotateActions = [];
-            var rotationAngle = 30;
-            var rotationDuration = 1, rotationDelay = 0.2;
-
-            hammerSprite.setAnchorPoint(cc.p(0.5, 1));
-            hammerSprite.setRotation(rotationAngle);
-
-            rotateActions.push(cc.RotateBy.create(rotationDuration, -rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            rotateActions.push(cc.RotateBy.create(rotationDuration, rotationAngle * 2));
-            rotateActions.push(cc.DelayTime.create(rotationDelay));
-            hammerSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(rotateActions)));
+            this.addChild(hammer);
+            this._hammers.push(hammer);
+            hammer.setPosition(cc.p(hammerX, 0));
         }
     },
 
     getMaxY:function() {
         return this.getPositionY() + this._platformSprites[0].getContentSize().height / 2;
+    },
+
+    getPolygonsForHitTest:function() {
+        var polygons = [];
+        $.each(this._hammers, function(index, hammer) {
+            $.each(hammer.getPolygonsForHitTest(), function(id, polygon) {
+                polygons.push(polygon.rotate(-hammer.getRotation(), cc.p(0, 0)).translate(hammer.getPosition()));
+            })
+        });
+        $.each(this._platformSprites, function(index, platformSprite) {
+            polygons.push(cb.Polygon.createFromCCRect(platformSprite.boundingBox()));
+        });
+        return polygons;
     }
 });

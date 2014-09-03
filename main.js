@@ -8,6 +8,7 @@ cb.resources.buildings = "buildings";
 cb.resources.ground = "ground";
 cb.resources.platform = "platform";
 cb.resources.hammer = "hammer";
+cb.resources.hammer_string = "hammer_string";
 cb.resources.swing_copters_title = "swing_copters_title";
 cb.resources.play_button = "play_button";
 cb.resources.play_button_selected = "play_button_selected";

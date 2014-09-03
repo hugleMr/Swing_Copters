@@ -43,7 +43,7 @@ cb.Player = cc.Node.extend({
     },
 
     _startAnimateCopterSprite:function() {
-        var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.player_copter, 0.15, true);
+        var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.player_copter, 0.1, true);
         this._copterSprite.runAction(spriteAnimationAction);
     },
 
@@ -70,6 +70,22 @@ cb.Player = cc.Node.extend({
 
     getMinY:function() {
         return this.getPositionX() - this._playerSprite.getContentSize().height/2;
+    },
+
+    setRotation:function(rotation) {
+        this._playerSprite.setRotation(rotation);
+        this._copterSprite.setRotation(rotation);
+    },
+
+    getRotation:function() {
+        return this._playerSprite.getRotation();
+    },
+
+    getPolygonsForHitTest:function() {
+        var polygons = [];
+        polygons.push(cb.Polygon.createFromCCRect(this._playerSprite.boundingBox()));
+        polygons.push(cb.Polygon.createFromCCRect(this._copterSprite.boundingBox()));
+        return polygons;
     }
 });
 }());

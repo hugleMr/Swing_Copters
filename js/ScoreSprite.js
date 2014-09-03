@@ -1,6 +1,6 @@
 cb.ScoreSprite = cc.Node.extend({
     _opacity : 255,
-    _score : 0,
+    _score : null,
 
     ctor:function(score) {
         this._super();

@@ -254,7 +254,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         this._playScene._player.update(dt);
 
         if (this._checkPlayerDead()) {
-            console.log("dead");
+            this._handlePlayerDead();
         }
         else {
             this._checkUpdateScore();
@@ -262,6 +262,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
             this._checkRespawn();
         }
     },
+
 
     _updateObjectPositions:function(dt) {
         var gravity = 100;
@@ -275,7 +276,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _checkPlayerDead:function() {
-        return this._checkPlayerHitScreenEdge();
+        return this._checkPlayerHitScreenEdge() || this._checkPlayerHitObstacle();
     },
 
     _checkPlayerHitScreenEdge:function() {
@@ -285,6 +286,14 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var playerMinX = playerX - playerWidth/2;
         var playerMaxX = playerX + playerWidth/2;
         return playerMinX <= 0 || playerMaxX >= this._playScene.getContentSize().width;
+    },
+
+    _handlePlayerDead:function() {
+        this._playScene.unscheduleUpdate();
+    },
+
+    _checkPlayerHitObstacle:function() {
+        return cb.Collision.checkObstaclePlayerCollide(this._unscoredObstacles[0], this._playScene._player);
     },
 
     _checkUpdateScore:function() {

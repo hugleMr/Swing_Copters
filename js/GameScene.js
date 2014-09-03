@@ -42,7 +42,6 @@ cb.GameScene = cc.Layer.extend({
         return cloudSprites;
     },
 
-    // x is the x coordinate of the middle point of the 'gap'
     _createObstacle:function(position) {
         var obstacle = new cb.Obstacle();
         obstacle.setZOrder(1);
