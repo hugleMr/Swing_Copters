@@ -1,5 +1,6 @@
 cb.Hammer = cc.Node.extend({
     _hammerSprite : null,
+    _angularVelocity : null,
 
     ctor:function() {
         this._super();
@@ -26,15 +27,15 @@ cb.Hammer = cc.Node.extend({
     },
 
     startRotatingWithMaxAngle:function(angle) {
-        var rotateActions = [];
-        var rotationDuration = 1, rotationDelay = 0.2;
-
-        rotateActions.push(cc.RotateBy.create(rotationDuration, -angle * 2));
-        rotateActions.push(cc.DelayTime.create(rotationDelay));
-        rotateActions.push(cc.RotateBy.create(rotationDuration, angle * 2));
-        rotateActions.push(cc.DelayTime.create(rotationDelay));
-
         this.setRotation(angle);
-        this.runAction(cc.RepeatForever.create(cc.Sequence.create(rotateActions)));
+        this.scheduleUpdate();
+    },
+
+    update:function(dt) {
+        this._super(dt);
+        var angularAcceleration = 1;
+
+        this.setRotation(this.getRotation() + this._angularVelocity * dt);
+        this._angularVelocity += (this.getRotation() > 0 ? -1 : 1) * angularAcceleration;
     }
 });
