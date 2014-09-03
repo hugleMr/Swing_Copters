@@ -207,9 +207,15 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _generateNextObstacles:function() {
-        var obstacleYDistance = 350, firstObstacleY = 1000;
+        function randomIntBetween(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
 
-        var obstacleX = this._playScene.getContentSize().width/2;
+        var obstacleYDistance = 350, firstObstacleY = 1000;
+        var obstacleMinX = 160, obstacleMaxX = this._playScene.getContentSize().width - obstacleMinX;
+
+        var obstacleX = randomIntBetween(obstacleMinX, obstacleMaxX);
+        console.log(obstacleX);
         var obstacleY = this._unscoredObstacles.length ? this._topObstacle().getPositionY() + obstacleYDistance : firstObstacleY;
 
         for (var i = 0; i < 2; i++) {
@@ -262,7 +268,6 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
             this._checkRespawn();
         }
     },
-
 
     _updateObjectPositions:function(dt) {
         var gravity = 100;
