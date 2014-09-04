@@ -54,7 +54,7 @@ window.onload = function(){
         cc.LoaderScene.preload([cb.resources.atlas_plist, cb.resources.atlas], function () {
             cc.spriteFrameCache.addSpriteFrames(cb.resources.atlas_plist, cb.resources.atlas);
 
-            cc.director.runScene(cb.PlayScene.create());
+            cc.director.runScene(cb.MainMenuScene.create());
         }, this);
     };
     cc.game.run("gameCanvas");

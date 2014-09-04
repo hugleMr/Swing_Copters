@@ -281,7 +281,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _updateObjectPositions:function(dt) {
-        var copterYVelocity = 100;
+        var copterYVelocity = 200;
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         for (var i = 0; i < scrollObjects.length; i++) {
             var obj = scrollObjects[i];
@@ -391,7 +391,7 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
     _animatePlayerFalling:function() {
         var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
         var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
-        var estimatedFallingTime = groundDistance / 200;
+        var estimatedFallingTime = groundDistance / 400;
         this._playScene._player.animateFalling(estimatedFallingTime);
     },
 
@@ -401,7 +401,7 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
     },
 
     _updateObjectPositions:function(dt) {
-        var gravity = -200;
+        var gravity = -400;
         var moveDistance = -gravity * dt;
         var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
         var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
