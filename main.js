@@ -61,10 +61,13 @@ window.onload = function(){
     createCanvas("gameCanvas", gameWidth, gameHeight);
 
     cc.game.onStart = function(){
-        cc.view.adjustViewPort(true);
-        cc.view.setDesignResolutionSize(gameWidth,gameHeight,cc.ResolutionPolicy.SHOW_ALL);
-        cc.view.resizeWithBrowserSize(true);
-        cc.director.setProjection(cc.Director.PROJECTION_2D);
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            cc.view.adjustViewPort(true);
+            cc.view.setDesignResolutionSize(gameWidth,gameHeight,cc.ResolutionPolicy.SHOW_ALL);
+            cc.view.resizeWithBrowserSize(true);
+            cc.director.setProjection(cc.Director.PROJECTION_2D);
+        }
 
         //load resources
         cc.LoaderScene.preload([cb.resources.atlas_plist, cb.resources.atlas], function () {
