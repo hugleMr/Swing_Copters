@@ -34,8 +34,12 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
         this._setState(new cb.Player.State.Flying(this));
     },
 
-    animateFalling:function() {
-        this._setState(new cb.Player.State.Falling(this));
+    animateFalling:function(animateDuration) {
+        this._setState(new cb.Player.State.Falling(this, animateDuration));
+    },
+
+    animateDead:function() {
+        this._setState(new cb.Player.State.Dead(this));
     },
 
     flipHorizontal:function() {
@@ -133,8 +137,17 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
     var copterWingInitialVelocity = cc.p(250, 250);
     var copterWingGravity = cc.p(0, -10);
 
+    cb.SimplePhysicsSprite = cc.Sprite.extend(cb.SimplePhysicsBodyImpl());
+
     return {
         _brokenCopterWingSprites : null,
+        _animateDuration : null,
+
+        ctor:function(player, animateDuration) {
+            this._super(player);
+
+            this._animateDuration = animateDuration;
+        },
 
         onEnter:function() {
             this._animatePlayerSprite();
@@ -144,9 +157,19 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
         _animatePlayerSprite:function() {
             this._player._playerSprite.setDisplayFrame(cc.spriteFrameCache.getSpriteFrame(cb.resources.player1_idle.substr(1)));
 
-            var rotationAngle = (this._player._playerSprite.isFlippedX() ? -1 : 1) * 360;
-            var rotationAction = cc.RotateBy.create(1, rotationAngle);
-            this._player._playerSprite.runAction(cc.RepeatForever.create(rotationAction));
+            var rotationAngleMultiplier = this._player._playerSprite.isFlippedX() ? -1 : 1;
+            if (this._animateDuration <= 1) {
+                this._player._playerSprite.runAction(cc.RotateBy.create(this._animateDuration, 180 * rotationAngleMultiplier));
+            }
+            else {
+                var cycleCounts = Math.floor(this._animateDuration);
+                var cycleDuration = this._animateDuration / (cycleCounts + 0.5); // half a cycle to rotated to upside down position
+                var rotateActions = [];
+                rotateActions.push(cc.RotateBy.create(cycleDuration / 2, 180 * rotationAngleMultiplier));
+                for (var i = 0; i < cycleCounts; i++)
+                    rotateActions.push(cc.RotateBy.create(cycleDuration, 360 * rotationAngleMultiplier));
+                this._player._playerSprite.runAction(cc.Sequence.create(rotateActions));
+            }
         },
 
         _animateCopterSprite:function() {
@@ -158,7 +181,7 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
         },
 
         _createLeftBrokenCopterWing:function() {
-            var copterLeftWing = new cb.BrokenCopterWingSprite(cb.resources.broken_copter_left_wing);
+            var copterLeftWing = new cb.SimplePhysicsSprite(cb.resources.broken_copter_left_wing);
             this._player.addChild(copterLeftWing);
             this._brokenCopterWingSprites.push(copterLeftWing);
 
@@ -171,7 +194,7 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
         },
 
         _createRightBrokenCopterWing:function() {
-            var copterRightWing = new cb.BrokenCopterWingSprite(cb.resources.broken_copter_right_wing);
+            var copterRightWing = new cb.SimplePhysicsSprite(cb.resources.broken_copter_right_wing);
             this._player.addChild(copterRightWing);
             var playerSpriteMaxY = this._player._playerSprite.getPositionY() + this._player._playerSprite.getContentSize().height/2;
             copterRightWing.setPosition(cc.p(copterWingX, playerSpriteMaxY + playerCopterWingYDistance + copterRightWing.getContentSize().height/2));
@@ -185,6 +208,13 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
         handleUpdate:function(dt) {
             $.each(this._brokenCopterWingSprites, function(index, copterWingSprite) {
                 copterWingSprite.update(dt);
+            });
+        },
+
+        onExit:function() {
+            var player = this._player;
+            $.each(this._brokenCopterWingSprites, function(index, copterWingSprite) {
+                player.removeChild(copterWingSprite);
             })
         }
     }
@@ -193,5 +223,3 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
 cb.Player.State.Dead = cb.Player.State.extend({
 
 });
-
-cb.BrokenCopterWingSprite = cc.Sprite.extend(cb.SimplePhysicsBodyImpl());

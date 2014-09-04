@@ -53,7 +53,10 @@ cb.GameScene = cc.Layer.extend({
     },
 
     _removeScrollObject:function(object) {
-        this._scrollLayer.removeChild(object);
+        if (object == this._buildingsSprite || object == this._groundSprite)
+            object.setVisible(false);
+        else
+            this._scrollLayer.removeChild(object);
     }
 });
 

@@ -18,10 +18,10 @@ cb.PlayScene = cb.GameScene.extend({
 
     _createPlayer:function() {
         this._player = new cb.Player();
-        this._player.setZOrder(1);
+        this._player.setZOrder(2);
         this._scrollLayer.addChild(this._player);
         this._player.setPosition(cc.p(this.getContentSize().width / 2, 234));
-        this.reorderChild(this._groundSprite, 1);
+        this._scrollLayer.reorderChild(this._groundSprite, 2);
     },
 
     _createScoreSprite:function() {
@@ -283,7 +283,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         for (var i = 0; i < scrollObjects.length; i++) {
             var obj = scrollObjects[i];
-            if (obj == this._playScene._player)
+            if (!obj.isVisible() || obj == this._playScene._player)
                 continue;
 
             var p = obj.getPosition();
@@ -306,6 +306,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _handlePlayerDead:function() {
+        this._playScene.unscheduleUpdate();
         this._playScene.setState(new cb.PlayScene.State.PlayerDying(this._playScene));
     },
 
@@ -324,7 +325,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _removeOffscreenObjects:function() {
-        var removeYThreshold = -100;
+        var removeYThreshold = -10;
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         var toBeRemovedObjects = [];
         for (var i = 0; i < scrollObjects.length; i++) {
@@ -359,10 +360,81 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
 
 cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
     onEnter:function() {
-        this._playScene._player.animateFalling();
+        this._setUpFallingGround();
+        this._updateObjectZOrders();
+        this._animatePlayerFalling();
+        this._playScene.scheduleUpdate();
+    },
+
+    onExit:function() {
+        this._playScene.scheduleUpdate();
+    },
+
+    _setUpFallingGround:function() {
+        if (!this._playScene._buildingsSprite.isVisible()) {
+            this._playScene._buildingsSprite.setPosition(cc.p(this._playScene.getContentSize().width/2, -300));
+            this._playScene._groundSprite.setPosition(cc.p(this._playScene.getContentSize().width/2,
+                this._playScene._buildingsSprite.getPositionY() - this._playScene._buildingsSprite.getContentSize().height/2
+                    + this._playScene._groundSprite.getContentSize().height/2));
+        }
+
+        this._playScene._buildingsSprite.setVisible(true);
+        this._playScene._groundSprite.setVisible(true);
+    },
+
+    _updateObjectZOrders:function() {
+
+    },
+
+    _animatePlayerFalling:function() {
+        var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
+        var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
+        var estimatedFallingTime = groundDistance / 200;
+        this._playScene._player.animateFalling(estimatedFallingTime);
     },
 
     handleUpdate:function(dt) {
         this._playScene._player.update(dt);
+        this._updateObjectPositions(dt);
+    },
+
+    _updateObjectPositions:function(dt) {
+        var gravity = -200;
+        var moveDistance = -gravity * dt;
+        var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
+        var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
+        var finishMovement = false;
+        if (groundDistance <= moveDistance) {
+            moveDistance = groundDistance;
+            finishMovement = true;
+        }
+
+        this._moveScrollObjectBy(moveDistance);
+        if (finishMovement)
+            this._gameOver();
+    },
+
+    _moveScrollObjectBy:function(deltaY) {
+        var scrollObjects = this._playScene._scrollLayer.getChildren();
+        for (var i = 0; i < scrollObjects.length; i++) {
+            var obj = scrollObjects[i];
+            if (!obj.isVisible() || obj == this._playScene._player)
+                continue;
+
+            var p = obj.getPosition();
+            p.y += deltaY;
+            obj.setPosition(p);
+        }
+
+    },
+
+    _gameOver:function() {
+        this._playScene.setState(new cb.PlayScene.State.GameOver(this._playScene));
+    }
+});
+
+cb.PlayScene.State.GameOver = cb.PlayScene.State.extend({
+    onEnter:function() {
+        this._playScene._player.animateDead();
     }
 });
