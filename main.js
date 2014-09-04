@@ -38,6 +38,7 @@ cb.resources.game_over = "game_over";
 cb.resources.score_board_bg = "score_board_bg";
 cb.resources.back_button = "back_button";
 cb.resources.back_button_selected = "back_button_selected";
+cb.resources.new_high_score = "new_high_score";
 
 (function() {
     for (var name in cb.resources)
