@@ -4,7 +4,7 @@ cb.SimplePhysicsBodyImpl = function() {
         _acceleration : null,
 
         ctor:function() {
-            this._super();
+            this._super.apply(this, arguments);
 
             this._velocity = cc.p(0, 0);
             this._acceleration = cc.p(0, 0);

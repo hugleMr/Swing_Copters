@@ -17,6 +17,32 @@
                 <key>sourceSize</key>
                 <string>{432,768}</string>
             </dict>
+            <key>broken_copter_left_wing</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1453,494},{12,24}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{12,24}}</string>
+                <key>sourceSize</key>
+                <string>{12,24}</string>
+            </dict>
+            <key>broken_copter_right_wing</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1479,494},{12,24}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{12,24}}</string>
+                <key>sourceSize</key>
+                <string>{12,24}</string>
+            </dict>
             <key>buildings</key>
             <dict>
                 <key>frame</key>
@@ -482,7 +508,7 @@
             <key>size</key>
             <string>{1823,508}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:7ce41e687484f26d85d2cdffd87bdac5:5683d3c45711ba48f947c7798e1c4d82:21d34b1ac1e7d41f765d139a133eeccc$</string>
+            <string>$TexturePacker:SmartUpdate:37b373c6f36c38417891200199de3d1b:2d12a5cb943b27c9624b5a8ebc161eb2:21d34b1ac1e7d41f765d139a133eeccc$</string>
             <key>textureFileName</key>
             <string>atlas.png</string>
         </dict>

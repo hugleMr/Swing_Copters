@@ -1,6 +1,7 @@
 cb.PlayScene = cb.GameScene.extend({
     _state : null,
     _player : null,
+    _scoreSprite : null,
     _touchListener : null,
     _touchEnabled : false,
 
@@ -21,6 +22,16 @@ cb.PlayScene = cb.GameScene.extend({
         this._scrollLayer.addChild(this._player);
         this._player.setPosition(cc.p(this.getContentSize().width / 2, 234));
         this.reorderChild(this._groundSprite, 1);
+    },
+
+    _createScoreSprite:function() {
+        this._scoreSprite = new cb.ScoreSprite();
+        this.addChild(this._scoreSprite);
+        this._scoreSprite.setPosition(cc.p(this.getContentSize().width/2, 600));
+    },
+
+    _incrementScore:function() {
+        this._scoreSprite.setScore(this._scoreSprite.getScore() + 1);
     },
 
     setState:function(state) {
@@ -182,7 +193,6 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
 });
 
 cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
-    _scoreSprite : null,
     _topCloud : null,
     _unscoredObstacles : null,
 
@@ -231,9 +241,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _animateShowScore:function() {
-        this._scoreSprite = new cb.ScoreSprite();
-        this._playScene.addChild(this._scoreSprite);
-        this._scoreSprite.setPosition(cc.p(this._playScene.getContentSize().width/2, 600));
+        this._playScene._createScoreSprite();
 
         var animationDuration = 1;
         var delayTillPlayDuration = 0.5;
@@ -242,12 +250,12 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         animationActions.push(cc.DelayTime.create(delayTillPlayDuration));
         animationActions.push(cc.CallFunc.create(this._startPlaying, this));
 
-        this._scoreSprite.setOpacity(0);
-        this._scoreSprite.runAction(cc.Sequence.create(animationActions));
+        this._playScene._scoreSprite.setOpacity(0);
+        this._playScene._scoreSprite.runAction(cc.Sequence.create(animationActions));
     },
 
     _startPlaying:function() {
-        this._playScene._player.startFlying();
+        this._playScene._player.animateFlying();
         this._playScene.setTouchEnabled(true);
         this._playScene.scheduleUpdate();
     },
@@ -298,7 +306,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _handlePlayerDead:function() {
-        this._playScene.unscheduleUpdate();
+        this._playScene.setState(new cb.PlayScene.State.PlayerDying(this._playScene));
     },
 
     _checkPlayerHitObstacle:function() {
@@ -311,12 +319,8 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var shouldUpdateScore = player.getMinY() > obstacle.getMaxY();
         if (shouldUpdateScore) {
             this._unscoredObstacles.splice(0, 1);
-            this._incrementScore();
+            this._playScene._incrementScore();
         }
-    },
-
-    _incrementScore:function() {
-        this._scoreSprite.setScore(this._scoreSprite.getScore() + 1);
     },
 
     _removeOffscreenObjects:function() {
@@ -350,5 +354,15 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var obstacleRespawnYThreshold = 1000;
         if (this._topObstacle().getPositionY() < obstacleRespawnYThreshold)
             this._generateNextObstacles();
+    }
+});
+
+cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
+    onEnter:function() {
+        this._playScene._player.animateFalling();
+    },
+
+    handleUpdate:function(dt) {
+        this._playScene._player.update(dt);
     }
 });

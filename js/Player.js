@@ -18,11 +18,9 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
     },
 
     _createCopterSprite:function() {
-        var playerCopterDistance = 2;
-
         this._copterSprite = cc.Sprite.create(cb.resources.player_copter + "_01");
         this.addChild(this._copterSprite);
-        this._copterSprite.setPosition(cc.p(0, this._playerSprite.getContentSize().height/2 + playerCopterDistance + this._copterSprite.getContentSize().height/2));
+        this._copterSprite.setPosition(cc.p(0, this._playerSprite.getContentSize().height/2 + 2 + this._copterSprite.getContentSize().height/2));
     },
 
     _setState:function(state) {
@@ -32,8 +30,12 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
         this._state.onEnter();
     },
 
-    startFlying:function() {
+    animateFlying:function() {
         this._setState(new cb.Player.State.Flying(this));
+    },
+
+    animateFalling:function() {
+        this._setState(new cb.Player.State.Falling(this));
     },
 
     flipHorizontal:function() {
@@ -45,7 +47,7 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
 
     update:function(dt) {
         this._super(dt);
-//        this._state.handleUpdate(dt);
+        this._state.handleUpdate(dt);
     },
 
     getContentSize:function() {
@@ -94,14 +96,14 @@ cb.Player.State.Idle = cb.Player.State.extend({
 
 cb.Player.State.Flying = cb.Player.State.extend({
     onEnter:function() {
-        this._startAnimatePlayerSprite();
-        this._startAnimateCopterSprite();
+        this._animatePlayerSprite();
+        this._animateCopterSprite();
 
         this._player.setVelocity(cc.p(0, 0));
         this._player.setAcceleration(cc.p(10, 0));
     },
 
-    _startAnimatePlayerSprite:function() {
+    _animatePlayerSprite:function() {
         var spriteFrameNames = [];
         for (var i = 0; i < 13; i++)
             spriteFrameNames.push(cb.resources.player1);
@@ -110,7 +112,7 @@ cb.Player.State.Flying = cb.Player.State.extend({
         this._player._playerSprite.runAction(spriteAnimationAction);
     },
 
-    _startAnimateCopterSprite:function() {
+    _animateCopterSprite:function() {
         var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.player_copter, 0.1, true);
         this._player._copterSprite.runAction(spriteAnimationAction);
     },
@@ -121,20 +123,75 @@ cb.Player.State.Flying = cb.Player.State.extend({
 
         this._player.setVelocity(cc.p(0, 0));
         this._player.setAcceleration(cc.p(0, 0));
-    },
-
-    handleUpdate:function(dt) {
-        this._player._xVelocity += this._player._xAcceleration;
-        var position = this._player.getPosition();
-        position.x += this._player._xVelocity * dt;
-        this._player.setPosition(position);
     }
 });
 
-cb.Player.State.Falling = cb.Player.State.extend({
+cb.Player.State.Falling = cb.Player.State.extend((function() {
+    var copterWingX = 10;
+    var playerCopterWingYDistance = 5;
+    var copterWingRotateDuration = 0.5;
+    var copterWingInitialVelocity = cc.p(250, 250);
+    var copterWingGravity = cc.p(0, -10);
 
-});
+    return {
+        _brokenCopterWingSprites : null,
+
+        onEnter:function() {
+            this._animatePlayerSprite();
+            this._animateCopterSprite();
+        },
+
+        _animatePlayerSprite:function() {
+            this._player._playerSprite.setDisplayFrame(cc.spriteFrameCache.getSpriteFrame(cb.resources.player1_idle.substr(1)));
+
+            var rotationAngle = (this._player._playerSprite.isFlippedX() ? -1 : 1) * 360;
+            var rotationAction = cc.RotateBy.create(1, rotationAngle);
+            this._player._playerSprite.runAction(cc.RepeatForever.create(rotationAction));
+        },
+
+        _animateCopterSprite:function() {
+            this._player.removeChild(this._player._copterSprite);
+
+            this._brokenCopterWingSprites = [];
+            this._createLeftBrokenCopterWing();
+            this._createRightBrokenCopterWing();
+        },
+
+        _createLeftBrokenCopterWing:function() {
+            var copterLeftWing = new cb.BrokenCopterWingSprite(cb.resources.broken_copter_left_wing);
+            this._player.addChild(copterLeftWing);
+            this._brokenCopterWingSprites.push(copterLeftWing);
+
+            var playerSpriteMaxY = this._player._playerSprite.getPositionY() + this._player._playerSprite.getContentSize().height/2;
+            copterLeftWing.setPosition(cc.p(-copterWingX, playerSpriteMaxY + playerCopterWingYDistance + copterLeftWing.getContentSize().height/2));
+
+            copterLeftWing.runAction(cc.RepeatForever.create(cc.RotateBy.create(copterWingRotateDuration, -360)));
+            copterLeftWing.setVelocity(cc.p(-copterWingInitialVelocity.x, copterWingInitialVelocity.y));
+            copterLeftWing.setAcceleration(copterWingGravity);
+        },
+
+        _createRightBrokenCopterWing:function() {
+            var copterRightWing = new cb.BrokenCopterWingSprite(cb.resources.broken_copter_right_wing);
+            this._player.addChild(copterRightWing);
+            var playerSpriteMaxY = this._player._playerSprite.getPositionY() + this._player._playerSprite.getContentSize().height/2;
+            copterRightWing.setPosition(cc.p(copterWingX, playerSpriteMaxY + playerCopterWingYDistance + copterRightWing.getContentSize().height/2));
+            this._brokenCopterWingSprites.push(copterRightWing);
+
+            copterRightWing.runAction(cc.RepeatForever.create(cc.RotateBy.create(copterWingRotateDuration, 360)));
+            copterRightWing.setVelocity(cc.p(copterWingInitialVelocity.x, copterWingInitialVelocity.y));
+            copterRightWing.setAcceleration(copterWingGravity);
+        },
+
+        handleUpdate:function(dt) {
+            $.each(this._brokenCopterWingSprites, function(index, copterWingSprite) {
+                copterWingSprite.update(dt);
+            })
+        }
+    }
+}()));
 
 cb.Player.State.Dead = cb.Player.State.extend({
 
 });
+
+cb.BrokenCopterWingSprite = cc.Sprite.extend(cb.SimplePhysicsBodyImpl());
