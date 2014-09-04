@@ -49,7 +49,23 @@ cb.resources.atlas = "images/atlas.png";
 cb.resources.atlas_plist = "images/atlas.plist";
 
 window.onload = function(){
+    function createCanvas(id, width, height) {
+        var gameCanvas = document.createElement("canvas");
+        gameCanvas.id = id;
+        gameCanvas.width = width;
+        gameCanvas.height = height;
+        document.body.appendChild(gameCanvas);
+    }
+
+    var gameWidth = 432, gameHeight = 768;
+    createCanvas("gameCanvas", gameWidth, gameHeight);
+
     cc.game.onStart = function(){
+        cc.view.adjustViewPort(true);
+        cc.view.setDesignResolutionSize(gameWidth,gameHeight,cc.ResolutionPolicy.SHOW_ALL);
+        cc.view.resizeWithBrowserSize(true);
+        cc.director.setProjection(cc.Director.PROJECTION_2D);
+
         //load resources
         cc.LoaderScene.preload([cb.resources.atlas_plist, cb.resources.atlas], function () {
             cc.spriteFrameCache.addSpriteFrames(cb.resources.atlas_plist, cb.resources.atlas);
