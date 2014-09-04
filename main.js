@@ -34,6 +34,10 @@ cb.resources.six = "six";
 cb.resources.seven = "seven";
 cb.resources.eight = "eight";
 cb.resources.nine = "nine";
+cb.resources.game_over = "game_over";
+cb.resources.score_board_bg = "score_board_bg";
+cb.resources.back_button = "back_button";
+cb.resources.back_button_selected = "back_button_selected";
 
 (function() {
     for (var name in cb.resources)

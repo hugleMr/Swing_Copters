@@ -63,4 +63,4 @@ cb.MainMenuScene.create = function() {
     var scene = new cc.Scene();
     scene.addChild(new cb.MainMenuScene());
     return scene;
-}
+};

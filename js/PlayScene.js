@@ -107,10 +107,10 @@ cb.PlayScene.State = cc.Class.extend({
 cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
     _getReadySprite : null,
     _tapToPlaySprite : null,
-    _animationCount : null,
+    _unfinishedAnimation : null,
 
     onEnter:function() {
-        this._animationCount = 0;
+        this._unfinishedAnimation = 0;
         var animationDuration = 0.4;
         this._animateShowGetReady(animationDuration);
         this._animateShowTapToPlay(animationDuration);
@@ -126,6 +126,7 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
 
         this._getReadySprite.setPosition(cc.p(this._playScene.getContentSize().width/2,
                                               this._playScene.getContentSize().height + this._getReadySprite.getContentSize().height/2));
+        this._unfinishedAnimation++;
         this._getReadySprite.runAction(cc.Sequence.create(animationActions));
     },
 
@@ -139,12 +140,12 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
         animationActions.push(cc.CallFunc.create(this._showAnimationDidEnd, this));
 
         this._tapToPlaySprite.setPosition(cc.p(-this._tapToPlaySprite.getContentSize().width/2, tapToPlayY));
+        this._unfinishedAnimation++;
         this._tapToPlaySprite.runAction(cc.Sequence.create(animationActions));
     },
 
     _showAnimationDidEnd:function() {
-        var expectedAnimation = 2;
-        if (++this._animationCount == expectedAnimation)
+        if (--this._unfinishedAnimation == 0)
             this._playScene.setTouchEnabled(true);
     },
 
@@ -154,7 +155,7 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
     },
 
     _startPlaying:function() {
-        this._animationCount = 0;
+        this._unfinishedAnimation = 0;
         var animationDuration = 0.4;
         this._animateHideGetReady(animationDuration);
         this._animateHideTapToPlay(animationDuration);
@@ -167,6 +168,7 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
                                                               this._playScene.getContentSize().height + this._getReadySprite.getContentSize().height/2)));
         animationActions.push(cc.CallFunc.create(this._hideAnimationDidEnd, this));
 
+        this._unfinishedAnimation++;
         this._getReadySprite.runAction(cc.Sequence.create(animationActions));
     },
 
@@ -176,13 +178,13 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
                                                               this._tapToPlaySprite.getPositionY())));
         animationActions.push(cc.CallFunc.create(this._hideAnimationDidEnd, this));
 
+        this._unfinishedAnimation++;
         this._tapToPlaySprite.runAction(cc.Sequence.create(animationActions));
 
     },
 
     _hideAnimationDidEnd:function() {
-        var expectedAnimation = 2;
-        if (++this._animationCount == expectedAnimation)
+        if (--this._unfinishedAnimation == 0)
             this._playScene.setState(new cb.PlayScene.State.Playing(this._playScene));
     },
 
@@ -434,7 +436,75 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
 });
 
 cb.PlayScene.State.GameOver = cb.PlayScene.State.extend({
+    _scoreBoard : null,
+
     onEnter:function() {
         this._playScene._player.animateDead();
+        this._playScene._scoreSprite.setVisible(false);
+        this._animateShowGameOver();
+    },
+
+    _animateShowGameOver:function() {
+        var gameOverSprite = cc.Sprite.create(cb.resources.game_over);
+        this._playScene.addChild(gameOverSprite);
+
+        var animationActions = [];
+        var position = this._playScene._scoreSprite.getPosition();
+        animationActions.push(cc.MoveTo.create(0.2, position));
+        position.y += 50;
+        animationActions.push(cc.MoveTo.create(0.1, position));
+        position.y -= 50;
+        animationActions.push(cc.MoveTo.create(0.1, position));
+        animationActions.push(cc.CallFunc.create(this._animateShowScoreBoard, this));
+
+        gameOverSprite.setPosition(cc.p(this._playScene.getContentSize().width/2,
+                                        this._playScene.getContentSize().height + gameOverSprite.getContentSize().height/2));
+        gameOverSprite.runAction(cc.Sequence.create(animationActions));
+    },
+
+    _animateShowScoreBoard:function() {
+        this._scoreBoard = new cb.ScoreBoard();
+        this._playScene.addChild(this._scoreBoard);
+
+        var animationActions = [];
+        animationActions.push(cc.MoveTo.create(0.5, cc.p(this._playScene.getContentSize().width/2,
+                                                         this._playScene.getContentSize().height/2)));
+        animationActions.push(cc.CallFunc.create(this._animateCalculateScore, this));
+
+        this._scoreBoard.setPosition(cc.p(this._playScene.getContentSize().width/2, 300));
+        this._scoreBoard.runAction(cc.Sequence.create(animationActions));
+    },
+
+    _animateCalculateScore:function() {
+        this._scoreBoard.animateScore(this._playScene._scoreSprite.getScore(), this._showButtons, this);
+    },
+
+    _showButtons:function() {
+        var menu = new cc.Menu();
+        this._playScene.addChild(menu);
+
+        var replayMenuItem = cc.MenuItemImage.create(cb.resources.play_button, cb.resources.play_button_selected, 'replay', this);
+        replayMenuItem.setPosition(cc.p(-95, -190));
+        menu.addChild(replayMenuItem);
+
+        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.leaderboard_button, cb.resources.leaderboard_button_selected, 'showLeaderboard', this);
+        leaderboardMenuItem.setPosition(cc.p(95, -190));
+        menu.addChild(leaderboardMenuItem);
+
+        var backMenuItem = cc.MenuItemImage.create(cb.resources.back_button, cb.resources.back_button_selected, 'back', this);
+        backMenuItem.setPosition(cc.p(-this._playScene.getContentSize().width/2 + backMenuItem.getContentSize().width/2, 140));
+        menu.addChild(backMenuItem);
+    },
+
+    replay:function() {
+        cc.director.pushScene(cc.TransitionFade.create(1, cb.PlayScene.create()));
+    },
+
+    showLeaderboard:function() {
+
+    },
+
+    back:function() {
+        cc.director.pushScene(cc.TransitionFade.create(1, cb.MainMenuScene.create()));
     }
 });
