@@ -64,7 +64,7 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
     },
 
     getMinY:function() {
-        return this.getPositionX() - this._playerSprite.getContentSize().height/2;
+        return this.getPositionY() - this._playerSprite.getContentSize().height/2;
     },
 
     getPolygonsForHitTest:function() {
