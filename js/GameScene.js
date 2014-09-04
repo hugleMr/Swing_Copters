@@ -1,6 +1,8 @@
 cb.GameScene = cc.Layer.extend({
     _backgroundLayer : null,
     _scrollLayer : null,
+    _buildingsSprite : null,
+    _groundSprite : null,
 
     ctor:function() {
         this._super();
@@ -19,15 +21,15 @@ cb.GameScene = cc.Layer.extend({
     },
 
     _initializeGrounds:function() {
-        var buildingsSprite = cc.Sprite.create(cb.resources.buildings);
-        buildingsSprite.setPosition(cc.p(this.getContentSize().width / 2,
-            buildingsSprite.getContentSize().height / 2));
-        this._scrollLayer.addChild(buildingsSprite);
+        this._buildingsSprite = cc.Sprite.create(cb.resources.buildings);
+        this._buildingsSprite.setPosition(cc.p(this.getContentSize().width / 2,
+            this._buildingsSprite.getContentSize().height / 2));
+        this._scrollLayer.addChild(this._buildingsSprite);
 
-        var groundSprite = cc.Sprite.create(cb.resources.ground);
-        groundSprite.setPosition(cc.p(this.getContentSize().width / 2,
-            groundSprite.getContentSize().height / 2));
-        this._scrollLayer.addChild(groundSprite);
+        this._groundSprite = cc.Sprite.create(cb.resources.ground);
+        this._groundSprite.setPosition(cc.p(this.getContentSize().width / 2,
+            this._groundSprite.getContentSize().height / 2));
+        this._scrollLayer.addChild(this._groundSprite);
     },
 
     _createClouds:function(cloudPositions) {

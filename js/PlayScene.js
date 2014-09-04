@@ -17,8 +17,10 @@ cb.PlayScene = cb.GameScene.extend({
 
     _createPlayer:function() {
         this._player = new cb.Player();
-        this.addChild(this._player);
+        this._player.setZOrder(1);
+        this._scrollLayer.addChild(this._player);
         this._player.setPosition(cc.p(this.getContentSize().width / 2, 234));
+        this.reorderChild(this._groundSprite, 1);
     },
 
     setState:function(state) {
@@ -215,7 +217,6 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         var obstacleMinX = 160, obstacleMaxX = this._playScene.getContentSize().width - obstacleMinX;
 
         var obstacleX = randomIntBetween(obstacleMinX, obstacleMaxX);
-        console.log(obstacleX);
         var obstacleY = this._unscoredObstacles.length ? this._topObstacle().getPositionY() + obstacleYDistance : firstObstacleY;
 
         for (var i = 0; i < 2; i++) {
@@ -246,7 +247,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _startPlaying:function() {
-        this._playScene._player.startAnimating();
+        this._playScene._player.startFlying();
         this._playScene.setTouchEnabled(true);
         this._playScene.scheduleUpdate();
     },
@@ -270,12 +271,15 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _updateObjectPositions:function(dt) {
-        var gravity = 100;
+        var copterYVelocity = 100;
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         for (var i = 0; i < scrollObjects.length; i++) {
             var obj = scrollObjects[i];
+            if (obj == this._playScene._player)
+                continue;
+
             var p = obj.getPosition();
-            p.y -= gravity * dt;
+            p.y -= copterYVelocity * dt;
             obj.setPosition(p);
         }
     },
