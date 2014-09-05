@@ -51,6 +51,7 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
 
     update:function(dt) {
         this._super(dt);
+        this.setRotation(this.getVelocity().x * 0.025);
         this._state.handleUpdate(dt);
     },
 

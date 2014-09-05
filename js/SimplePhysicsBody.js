@@ -11,15 +11,19 @@ cb.SimplePhysicsBodyImpl = function() {
         },
 
         setVelocity:function(velocity) {
-            this._velocity = cc.p(velocity.x, velocity.y);
+            this._velocity = cc.p(velocity);
+        },
+
+        getVelocity:function(velocity) {
+            return cc.p(this._velocity);
         },
 
         setAcceleration:function(acceleration) {
-            this._acceleration = cc.p(acceleration.x, acceleration.y);
+            this._acceleration = cc.p(acceleration);
         },
 
         getAcceleration:function() {
-            return cc.p(this._acceleration.x, this._acceleration.y);
+            return cc.p(this._acceleration);
         },
 
         update:function(dt) {

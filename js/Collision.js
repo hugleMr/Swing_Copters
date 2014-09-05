@@ -62,7 +62,7 @@ cb.Collision.checkObstaclePlayerCollide = function(obstacle, player) {
 
 cb.Collision.converToWorldPolygon = function(polygon, object) {
     var worldSpacePosition = object.getParent().convertToWorldSpace(object.getPosition());
-    return polygon.translate(worldSpacePosition);
+    return polygon.translate(worldSpacePosition).rotate(-object.getRotation(), worldSpacePosition);
 };
 
 cb.Collision.rotatePoint = function(point, degreeAngle, pivot) {
