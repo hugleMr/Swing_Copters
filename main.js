@@ -40,6 +40,9 @@ cb.resources.back_button = "back_button";
 cb.resources.back_button_selected = "back_button_selected";
 cb.resources.new_high_score = "new_high_score";
 cb.resources.medal_prefix = "medal_";
+cb.resources.sparkle_particle_01 = "sparkle_particle_01";
+cb.resources.sparkle_particle_02 = "sparkle_particle_02";
+cb.resources.sparkle_particle_03 = "sparkle_particle_03";
 
 (function() {
     for (var name in cb.resources)

@@ -46,11 +46,11 @@
             <key>broken_copter_left_wing</key>
             <dict>
                 <key>frame</key>
-                <string>{{758,1493},{12,24}}</string>
+                <string>{{463,1881},{12,24}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{12,24}}</string>
                 <key>sourceSize</key>
@@ -59,11 +59,11 @@
             <key>broken_copter_right_wing</key>
             <dict>
                 <key>frame</key>
-                <string>{{758,1519},{12,24}}</string>
+                <string>{{489,1881},{12,24}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{12,24}}</string>
                 <key>sourceSize</key>
@@ -602,6 +602,45 @@
                 <key>sourceSize</key>
                 <string>{21,30}</string>
             </dict>
+            <key>sparkle_particle_01</key>
+            <dict>
+                <key>frame</key>
+                <string>{{329,1456},{3,3}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{3,3}}</string>
+                <key>sourceSize</key>
+                <string>{3,3}</string>
+            </dict>
+            <key>sparkle_particle_02</key>
+            <dict>
+                <key>frame</key>
+                <string>{{227,1818},{9,9}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{9,9}}</string>
+                <key>sourceSize</key>
+                <string>{9,9}</string>
+            </dict>
+            <key>sparkle_particle_03</key>
+            <dict>
+                <key>frame</key>
+                <string>{{446,1878},{15,15}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{15,15}}</string>
+                <key>sourceSize</key>
+                <string>{15,15}</string>
+            </dict>
             <key>swing_copters_title_01</key>
             <dict>
                 <key>frame</key>
@@ -755,7 +794,7 @@
             <key>size</key>
             <string>{772,1895}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:28067ad9db9d7ad8864cb7393b3db3a5:4563ced578005196ac97f2d6828c3339:21d34b1ac1e7d41f765d139a133eeccc$</string>
+            <string>$TexturePacker:SmartUpdate:aeb90ef65b89b5594d2dc78f5cf2324e:f70d44b9670c72cfe4f12498aff36887:21d34b1ac1e7d41f765d139a133eeccc$</string>
             <key>textureFileName</key>
             <string>atlas.png</string>
         </dict>

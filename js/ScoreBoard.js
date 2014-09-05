@@ -66,6 +66,13 @@ cb.ScoreBoard = cc.Node.extend({
         var highlightNewSprite = cc.Sprite.create(cb.resources.new_high_score);
         this.addChild(highlightNewSprite);
         highlightNewSprite.setPosition(cc.p(57, -12))
+
+        var highlightActions = [];
+        highlightActions.push(cc.FadeIn.create(0.25));
+        highlightActions.push(cc.FadeOut.create(0.25));
+
+        highlightNewSprite.setOpacity(0);
+        highlightNewSprite.runAction(cc.RepeatForever.create(cc.Sequence.create(highlightActions)));
     },
 
     _animateShowMedal:function(medalType) {
@@ -75,6 +82,7 @@ cb.ScoreBoard = cc.Node.extend({
 
         var animationActions = [];
         animationActions.push(cc.ScaleTo.create(0.5, 1));
+        animationActions.push(cc.CallFunc.create(medal.animateSparkle, medal));
 
         medal.setScale(1.2);
         medal.runAction(cc.Sequence.create(animationActions));
