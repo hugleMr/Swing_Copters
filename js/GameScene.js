@@ -13,8 +13,8 @@ cb.GameScene = cc.Layer.extend({
         this.addChild(this._scrollLayer);
     },
 
-    _initializeBackground:function() {
-        var backgroundSprite = cc.Sprite.create(cb.resources.background1);
+    _initializeBackground:function(backgroundId) {
+        var backgroundSprite = cc.Sprite.create(cb.resources.backgrounds[backgroundId || 0]);
         backgroundSprite.setPosition(cc.p(this.getContentSize().width / 2,
             this.getContentSize().height / 2));
         this._backgroundLayer.addChild(backgroundSprite);
@@ -32,14 +32,14 @@ cb.GameScene = cc.Layer.extend({
         this._scrollLayer.addChild(this._groundSprite);
     },
 
-    _createClouds:function(cloudYPositions) {
+    _createClouds:function(cloudYPositions, cloudId) {
         var cloudXDistanceToMidScreen = 70;
         var screenWidth = this.getContentSize().width;
         var cloudXPositions = [ screenWidth/2 - cloudXDistanceToMidScreen, screenWidth/2 + cloudXDistanceToMidScreen ];
 
         var cloudSprites = [];
         for (var i = 0; i < cloudYPositions.length; i++) {
-            var cloudSprite = cc.Sprite.create(cb.resources.cloud1);
+            var cloudSprite = cc.Sprite.create(cb.resources.clouds[cloudId || 0]);
             cloudSprite.setZOrder(0);
             cloudSprite.setPosition(cc.p(cloudXPositions[i % 2], cloudYPositions[i]));
             this._scrollLayer.addChild(cloudSprite);

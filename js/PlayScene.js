@@ -4,14 +4,24 @@ cb.PlayScene = cb.GameScene.extend({
     _scoreSprite : null,
     _touchListener : null,
     _touchEnabled : false,
+    _backgroundId : null,
 
     ctor:function() {
         this._super();
+        this._backgroundId = Math.floor(Math.random() * cb.resources.backgrounds.length);
 
         this._initializeBackground();
         this._initializeGrounds();
         this._createClouds([ 400, 600, 800, 1000 ]);
         this._createPlayer();
+    },
+
+    _initializeBackground:function() {
+        this._super(this._backgroundId);
+    },
+
+    _createClouds:function(cloudYPositions) {
+        return this._super(cloudYPositions, this._backgroundId);
     },
 
     _createPlayer:function() {

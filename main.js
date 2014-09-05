@@ -2,8 +2,8 @@ var cb = {};
 
 cb.resources = {};
 
-cb.resources.background1 = "background1";
-cb.resources.cloud1 = "cloud1";
+cb.resources.backgrounds = [ "bg_01", "bg_02", "bg_03" ];
+cb.resources.clouds = [ "cloud_01", "cloud_02", "cloud_03" ];
 cb.resources.buildings = "buildings";
 cb.resources.ground = "ground";
 cb.resources.platform = "platform";
@@ -45,8 +45,18 @@ cb.resources.sparkle_particle_02 = "sparkle_particle_02";
 cb.resources.sparkle_particle_03 = "sparkle_particle_03";
 
 (function() {
+    function isArray(obj) {
+        return Object.prototype.toString.call(obj) === '[object Array]';
+    }
+
     for (var name in cb.resources)
-        cb.resources[name] = "#" + cb.resources[name];
+        if (isArray(cb.resources[name])) {
+            for (var i = 0; i < cb.resources[name].length; i++)
+                cb.resources[name][i] = "#" + cb.resources[name][i];
+        }
+        else {
+            cb.resources[name] = "#" + cb.resources[name];
+        }
 }());
 
 cb.resources.atlas = "images/atlas.png";
