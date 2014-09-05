@@ -11,7 +11,7 @@ cb.Obstacle = cc.Node.extend({
 
     _createPlatformSprites:function() {
         this._platformSprites = [];
-        var gapWidth = 222;
+        var gapWidth = cb.Config.OBSTACLE_GAP_WIDTH;
         var platformXs = [ -gapWidth/2, gapWidth/2 ];
         for (var i = 0; i < platformXs.length; i++) {
             var platformSprite = cc.Sprite.create(cb.resources.platform);
