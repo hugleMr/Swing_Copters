@@ -158,18 +158,14 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
             this._player._playerSprite.setDisplayFrame(cc.spriteFrameCache.getSpriteFrame(cb.resources.player1_idle.substr(1)));
 
             var rotationAngleMultiplier = this._player._playerSprite.isFlippedX() ? -1 : 1;
-            if (this._animateDuration <= 1) {
-                this._player._playerSprite.runAction(cc.RotateBy.create(this._animateDuration, 180 * rotationAngleMultiplier));
-            }
-            else {
-                var cycleCounts = Math.floor(this._animateDuration);
-                var cycleDuration = this._animateDuration / (cycleCounts + 0.5); // half a cycle to rotated to upside down position
-                var rotateActions = [];
-                rotateActions.push(cc.RotateBy.create(cycleDuration / 2, 180 * rotationAngleMultiplier));
-                for (var i = 0; i < cycleCounts; i++)
-                    rotateActions.push(cc.RotateBy.create(cycleDuration, 360 * rotationAngleMultiplier));
-                this._player._playerSprite.runAction(cc.Sequence.create(rotateActions));
-            }
+            var cyclePerSeconds = 2;
+            var cycleCounts = Math.floor(this._animateDuration * cyclePerSeconds);
+            var cycleDuration = this._animateDuration / (cycleCounts + 0.5); // half a cycle to rotated to upside down position
+            var rotateActions = [];
+            rotateActions.push(cc.RotateBy.create(cycleDuration / 2, 180 * rotationAngleMultiplier));
+            for (var i = 0; i < cycleCounts; i++)
+                rotateActions.push(cc.RotateBy.create(cycleDuration, 360 * rotationAngleMultiplier));
+            this._player._playerSprite.runAction(cc.Sequence.create(rotateActions));
         },
 
         _animateCopterSprite:function() {
