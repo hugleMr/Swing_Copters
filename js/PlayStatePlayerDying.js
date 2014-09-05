@@ -29,7 +29,7 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
     _animatePlayerFalling:function() {
         var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
         var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
-        var estimatedFallingTime = groundDistance / 400;
+        var estimatedFallingTime = groundDistance / Math.abs(cb.Config.GRAVITY);
         this._playScene._player.animateFalling(estimatedFallingTime);
     },
 
