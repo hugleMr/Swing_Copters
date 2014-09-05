@@ -60,8 +60,15 @@ window.onload = function(){
     var gameWidth = 432, gameHeight = 768;
     var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
-        var screenWidth = screen.availWidth;
-        var screenHeight = screen.availHeight;
+        var screenWidth, screenHeight;
+        if (document.fullscreenEnabled) {
+            screenWidth = screen.availWidth;
+            screenHeight = screen.availHeight;
+        }
+        else {
+            screenWidth = $(window).width();
+            screenHeight = $(window).height();
+        }
         var widthHeightRatio = screenWidth / screenHeight;
         gameWidth = widthHeightRatio * gameHeight;
     }
