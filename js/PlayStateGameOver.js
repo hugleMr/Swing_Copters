@@ -32,14 +32,15 @@ cb.PlayScene.State.GameOver = cb.PlayScene.State.extend({
         var animationActions = [];
         animationActions.push(cc.MoveTo.create(0.5, cc.p(this._playScene.getContentSize().width/2,
             this._playScene.getContentSize().height/2)));
-        animationActions.push(cc.CallFunc.create(this._animateCalculateScore, this));
+        animationActions.push(cc.CallFunc.create(this._showScoreBoardAnimationDidEnd, this));
 
         this._scoreBoard.setPosition(cc.p(this._playScene.getContentSize().width/2, 300));
         this._scoreBoard.runAction(cc.Sequence.create(animationActions));
     },
 
-    _animateCalculateScore:function() {
-        this._scoreBoard.animateScore(this._playScene._scoreSprite.getScore(), this._showButtons, this);
+    _showScoreBoardAnimationDidEnd:function() {
+        this._showButtons();
+        this._scoreBoard.animateScore(this._playScene._scoreSprite.getScore());
     },
 
     _showButtons:function() {

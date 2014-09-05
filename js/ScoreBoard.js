@@ -28,14 +28,21 @@ cb.ScoreBoard = cc.Node.extend({
         this._highScoreSprite.setPosition(cc.p(136, -42));
     },
 
-    animateScore:function(score, callback, callbackTarget) {
+    animateScore:function(score) {
+        // Save the highscore first in case player cancels the animation prematurely
+        var isNewHighScore = score > this._highScoreSprite.getScore();
+        if (isNewHighScore)
+            this._saveNewHighScore(score);
+
         var updateInterval = 0.05;
         function animationUpdate() {
             if (this._scoreSprite.getScore() == score) {
-                if (score > this._highScoreSprite.getScore()) {
+                if (isNewHighScore)
                     this._updateHighScore(score);
-                }
-                callback.apply(callbackTarget);
+
+                var medalType = cb.Config.getMedalTypeForScore(score);
+                if (medalType)
+                    this._animateShowMedal(medalType);
             }
             else {
                 this._scoreSprite.setScore(this._scoreSprite.getScore() + 1);
@@ -46,8 +53,11 @@ cb.ScoreBoard = cc.Node.extend({
         animationUpdate.apply(this);
     },
 
-    _updateHighScore:function(newHighScore) {
+    _saveNewHighScore:function(newHighScore) {
         cb.CookieManager.sharedManager().saveCookie("highscore", newHighScore);
+    },
+
+    _updateHighScore:function(newHighScore) {
         this._highScoreSprite.setScore(newHighScore);
         this._highlightNewHighScore();
     },
@@ -56,5 +66,17 @@ cb.ScoreBoard = cc.Node.extend({
         var highlightNewSprite = cc.Sprite.create(cb.resources.new_high_score);
         this.addChild(highlightNewSprite);
         highlightNewSprite.setPosition(cc.p(57, -12))
+    },
+
+    _animateShowMedal:function(medalType) {
+        var medal = new cb.Medal(medalType);
+        this.addChild(medal);
+        medal.setPosition(cc.p(-98, -12));
+
+        var animationActions = [];
+        animationActions.push(cc.ScaleTo.create(0.5, 1));
+
+        medal.setScale(1.2);
+        medal.runAction(cc.Sequence.create(animationActions));
     }
 });
