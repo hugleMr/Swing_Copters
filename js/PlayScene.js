@@ -12,8 +12,6 @@ cb.PlayScene = cb.GameScene.extend({
         this._initializeGrounds();
         this._createClouds([ 400, 600, 800, 1000 ]);
         this._createPlayer();
-
-        this.setState(new cb.PlayScene.State.TapToPlay(this));
     },
 
     _createPlayer:function() {
@@ -22,6 +20,11 @@ cb.PlayScene = cb.GameScene.extend({
         this._scrollLayer.addChild(this._player);
         this._player.setPosition(cc.p(this.getContentSize().width / 2, 234));
         this._scrollLayer.reorderChild(this._groundSprite, 2);
+    },
+
+    onEnterTransitionDidFinish:function() {
+        this._super();
+        this.setState(new cb.PlayScene.State.TapToPlay(this));
     },
 
     _createScoreSprite:function() {
