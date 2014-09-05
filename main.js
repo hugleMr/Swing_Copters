@@ -58,10 +58,17 @@ window.onload = function(){
     }
 
     var gameWidth = 432, gameHeight = 768;
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+        var screenWidth = screen.availWidth;
+        var screenHeight = screen.availHeight;
+        var widthHeightRatio = screenWidth / screenHeight;
+        gameWidth = widthHeightRatio * gameHeight;
+    }
+
     createCanvas("gameCanvas", gameWidth, gameHeight);
 
     cc.game.onStart = function(){
-        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
             cc.view.adjustViewPort(true);
             cc.view.setDesignResolutionSize(gameWidth,gameHeight,cc.ResolutionPolicy.SHOW_ALL);
