@@ -1,8 +1,8 @@
 cb.MedalType = {
-    Bronze : { name : "bronze", score : 1 },
-    Silver : { name : "silver", score : 2 },
-    Gold : { name : "gold", score : 3 },
-    Platinum : { name : "platinum", score : 4 }
+    Bronze : { name : "bronze", score : 20 },
+    Silver : { name : "silver", score : 40 },
+    Gold : { name : "gold", score : 60 },
+    Platinum : { name : "platinum", score : 80 }
 };
 
 cb.Config = {
