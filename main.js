@@ -75,7 +75,8 @@ window.onload = function(){
     var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
         var screenWidth, screenHeight;
-        if (document.fullscreenEnabled) {
+        // FIXME: should not access private property
+        if (cc.screen._supportsFullScreen) {
             screenWidth = screen.availWidth;
             screenHeight = screen.availHeight;
         }
