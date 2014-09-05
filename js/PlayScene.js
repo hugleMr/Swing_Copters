@@ -281,7 +281,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _updateObjectPositions:function(dt) {
-        var copterYVelocity = 200;
+        var copterYVelocity = cb.Config.COPTER_Y_VELOCITY;
         var scrollObjects = this._playScene._scrollLayer.getChildren();
         for (var i = 0; i < scrollObjects.length; i++) {
             var obj = scrollObjects[i];
@@ -289,6 +289,9 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
                 continue;
 
             var p = obj.getPosition();
+            // Instead of moving up the copter
+            // We simulate the movement by moving down everything else
+            // i.e. we have to minus the velocity of copter
             p.y -= copterYVelocity * dt;
             obj.setPosition(p);
         }
@@ -401,8 +404,10 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
     },
 
     _updateObjectPositions:function(dt) {
-        var gravity = -400;
-        var moveDistance = -gravity * dt;
+        // Instead of moving the copter down
+        // We simulate by moving up other objects
+        // Thus we need to take the minus value of gravity
+        var moveDistance = -cb.Config.GRAVITY * dt;
         var groundDestination = this._playScene._groundSprite.getContentSize().height / 2;
         var groundDistance = groundDestination - this._playScene._groundSprite.getPositionY();
         var finishMovement = false;

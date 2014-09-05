@@ -104,7 +104,7 @@ cb.Player.State.Flying = cb.Player.State.extend({
         this._animateCopterSprite();
 
         this._player.setVelocity(cc.p(0, 0));
-        this._player.setAcceleration(cc.p(20, 0));
+        this._player.setAcceleration(cc.p(cb.Config.COPTER_X_ACCELERATION, 0));
     },
 
     _animatePlayerSprite:function() {
