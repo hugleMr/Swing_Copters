@@ -1,7 +1,11 @@
 cb.CookieManager = cc.Class.extend({
     // from http://www.w3schools.com/js/js_cookies.asp
     saveCookie:function(cname, cvalue) {
-        document.cookie = cname + "=" + cvalue;
+        var expiryDays = 90;
+        var d = new Date();
+        d.setTime(d.getTime() + (expiryDays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
     },
 
     // from http://www.w3schools.com/js/js_cookies.asp
@@ -26,3 +30,5 @@ cb.CookieManager.sharedManager = (function() {
         return sharedManager;
     }
 }());
+
+cb.cookieManager = cb.CookieManager.sharedManager();
