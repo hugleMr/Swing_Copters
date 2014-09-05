@@ -10,7 +10,7 @@ cb.PlayScene = cb.GameScene.extend({
 
         this._initializeBackground();
         this._initializeGrounds();
-        this._createClouds([ cc.p(150, 400), cc.p(300, 600), cc.p(150, 800), cc.p(300, 1000) ]);
+        this._createClouds([ 400, 600, 800, 1000 ]);
         this._createPlayer();
 
         this.setState(new cb.PlayScene.State.TapToPlay(this));

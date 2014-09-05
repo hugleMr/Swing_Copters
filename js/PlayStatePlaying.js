@@ -11,17 +11,16 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _generateNextClouds:function() {
-        var cloudXs = [ 150, 300 ];
         var cloudYDistance = 200, firstCloudY = 1200;
 
         var cloudY = this._topCloud ? this._topCloud.getPositionY() + cloudYDistance : firstCloudY;
-        var cloudPositions = [];
+        var cloudYPositions = [];
         for (var i = 0; i < 4; i++) {
-            cloudPositions.push(cc.p(cloudXs[i % 2], cloudY));
+            cloudYPositions.push(cloudY);
             cloudY += cloudYDistance;
         }
 
-        this._topCloud = this._playScene._createClouds(cloudPositions).slice(-1)[0];
+        this._topCloud = this._playScene._createClouds(cloudYPositions).slice(-1)[0];
     },
 
     _generateNextObstacles:function() {

@@ -4,7 +4,7 @@ cb.MainMenuScene = cb.GameScene.extend({
 
         this._initializeBackground();
         this._initializeGrounds();
-        this._createClouds([ cc.p(300, 600), cc.p(150, 400) ]);
+        this._createClouds([ 400, 600 ]);
         this._createObstacle(cc.p(this.getContentSize().width/2, 500));
         this._initializeAnimatedTitleSprite();
         this._initializeMenuButtons();

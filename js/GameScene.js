@@ -32,12 +32,16 @@ cb.GameScene = cc.Layer.extend({
         this._scrollLayer.addChild(this._groundSprite);
     },
 
-    _createClouds:function(cloudPositions) {
+    _createClouds:function(cloudYPositions) {
+        var cloudXDistanceToMidScreen = 70;
+        var screenWidth = this.getContentSize().width;
+        var cloudXPositions = [ screenWidth/2 - cloudXDistanceToMidScreen, screenWidth/2 + cloudXDistanceToMidScreen ];
+
         var cloudSprites = [];
-        for (var i = 0; i < cloudPositions.length; i++) {
+        for (var i = 0; i < cloudYPositions.length; i++) {
             var cloudSprite = cc.Sprite.create(cb.resources.cloud1);
             cloudSprite.setZOrder(0);
-            cloudSprite.setPosition(cloudPositions[i]);
+            cloudSprite.setPosition(cc.p(cloudXPositions[i % 2], cloudYPositions[i]));
             this._scrollLayer.addChild(cloudSprite);
             cloudSprites.push(cloudSprite);
         }
@@ -59,5 +63,3 @@ cb.GameScene = cc.Layer.extend({
             this._scrollLayer.removeChild(object);
     }
 });
-
-cb.GameScene.ScrollObjectTag = { Cloud : 100, Obstacle : 101 };
