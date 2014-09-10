@@ -7,7 +7,7 @@ cb.Medal = cc.Node.extend({
     },
 
     _createMedalSprite:function(type) {
-        this._medalSprite = cc.Sprite.create(cb.resources.medal_prefix + type.name);
+        this._medalSprite = cc.Sprite.create(cb.resources.images.medal_prefix + type.name);
         this.addChild(this._medalSprite);
     },
 

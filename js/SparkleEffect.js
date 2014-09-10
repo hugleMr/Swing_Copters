@@ -8,16 +8,16 @@ cb.SparkleEffect = cc.Node.extend({
 
     _animateEffect:function() {
         var sparkleParticleFrameNames = [
-            cb.resources.sparkle_particle_01,
-            cb.resources.sparkle_particle_02,
-            cb.resources.sparkle_particle_02,
-            cb.resources.sparkle_particle_02,
-            cb.resources.sparkle_particle_03,
-            cb.resources.sparkle_particle_03,
-            cb.resources.sparkle_particle_03,
-            cb.resources.sparkle_particle_03,
-            cb.resources.sparkle_particle_03,
-            cb.resources.sparkle_particle_03
+            cb.resources.images.sparkle_particle_01,
+            cb.resources.images.sparkle_particle_02,
+            cb.resources.images.sparkle_particle_02,
+            cb.resources.images.sparkle_particle_02,
+            cb.resources.images.sparkle_particle_03,
+            cb.resources.images.sparkle_particle_03,
+            cb.resources.images.sparkle_particle_03,
+            cb.resources.images.sparkle_particle_03,
+            cb.resources.images.sparkle_particle_03,
+            cb.resources.images.sparkle_particle_03
         ];
 
         var sparkleParticleFrameId = Math.floor(Math.random() * sparkleParticleFrameNames.length);

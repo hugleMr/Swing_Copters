@@ -11,7 +11,7 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
     },
 
     _animateShowGetReady:function(duration) {
-        this._getReadySprite = cc.Sprite.create(cb.resources.get_ready);
+        this._getReadySprite = cc.Sprite.create(cb.resources.images.get_ready);
         this._playScene.addChild(this._getReadySprite);
 
         var animationActions = [];
@@ -25,7 +25,7 @@ cb.PlayScene.State.TapToPlay = cb.PlayScene.State.extend({
     },
 
     _animateShowTapToPlay:function(duration) {
-        this._tapToPlaySprite = cc.Sprite.create(cb.resources.tap_to_play);
+        this._tapToPlaySprite = cc.Sprite.create(cb.resources.images.tap_to_play);
         this._playScene.addChild(this._tapToPlaySprite);
 
         var animationActions = [];

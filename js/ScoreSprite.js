@@ -57,25 +57,13 @@ cb.ScoreSprite.Font = cc.Class.extend({
     },
 
     createDigitSprite:function(digit) {
-        var spriteFrameNames = [
-            cb.resources.zero,
-            cb.resources.one,
-            cb.resources.two,
-            cb.resources.three,
-            cb.resources.four,
-            cb.resources.five,
-            cb.resources.six,
-            cb.resources.seven,
-            cb.resources.eight,
-            cb.resources.nine
-        ];
-        return cc.Sprite.create(spriteFrameNames[digit] + this._fontSuffix);
+        return cc.Sprite.create(cb.resources.images.scores[digit] + this._fontSuffix);
     }
 });
 
 cb.ScoreSprite.Font.Normal = new cb.ScoreSprite.Font("");
 
-cb.ScoreSprite.Font.Small = new cb.ScoreSprite.Font("_small");
+cb.ScoreSprite.Font.Small = new cb.ScoreSprite.Font(cb.resources.images.score_small_suffix);
 
 cb.ScoreSprite.Alignment = {};
 

@@ -14,7 +14,7 @@ cb.Obstacle = cc.Node.extend({
         var gapWidth = cb.Config.OBSTACLE_GAP_WIDTH;
         var platformXs = [ -gapWidth/2, gapWidth/2 ];
         for (var i = 0; i < platformXs.length; i++) {
-            var platformSprite = cc.Sprite.create(cb.resources.platform);
+            var platformSprite = cc.Sprite.create(cb.resources.images.platform);
             var platformPosition = cc.p(platformXs[i], 0);
             platformPosition.x += (i ? 1 : -1) * platformSprite.getContentSize().width/2;
             platformSprite.setPosition(platformPosition);

@@ -11,13 +11,13 @@ cb.Hammer = cc.Node.extend({
     },
 
     _createHammerStringSprite:function() {
-        var hammerStringSprite = cc.Sprite.create(cb.resources.hammer_string);
+        var hammerStringSprite = cc.Sprite.create(cb.resources.images.hammer_string);
         this.addChild(hammerStringSprite);
         hammerStringSprite.setPosition(cc.p(0, -42));
     },
 
     _createHammerSprite:function() {
-        this._hammerSprite = cc.Sprite.create(cb.resources.hammer);
+        this._hammerSprite = cc.Sprite.create(cb.resources.images.hammer);
         this.addChild(this._hammerSprite);
         this._hammerSprite.setPosition(cc.p(0, -90));
     },

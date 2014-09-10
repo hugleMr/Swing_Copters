@@ -8,7 +8,7 @@ cb.PlayScene = cb.GameScene.extend({
 
     ctor:function() {
         this._super();
-        this._backgroundId = Math.floor(Math.random() * cb.resources.backgrounds.length);
+        this._backgroundId = Math.floor(Math.random() * cb.resources.images.backgrounds.length);
 
         this._initializeBackground();
         this._initializeGrounds();

@@ -11,11 +11,11 @@ cb.MainMenuScene = cb.GameScene.extend({
     },
 
     _initializeAnimatedTitleSprite:function() {
-        var animatedSprite = cc.Sprite.createWithSpriteFrameName(cb.resources.swing_copters_title + "_01");
+        var animatedSprite = cc.Sprite.createWithSpriteFrameName(cb.resources.images.swing_copters_title + "_01");
         this.addChild(animatedSprite);
         animatedSprite.setPosition(cc.p(this.getContentSize().width / 2, 520));
 
-        var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.swing_copters_title, 0.15, true);
+        var spriteAnimationAction = cb.Animation.createSpriteAnimationActionWithPrefix(cb.resources.images.swing_copters_title, 0.15, true);
         animatedSprite.runAction(spriteAnimationAction);
 
         var moveAnimationActions = [];
@@ -33,15 +33,15 @@ cb.MainMenuScene = cb.GameScene.extend({
         var menu = new cc.Menu();
         this.addChild(menu);
 
-        var playMenuItem = cc.MenuItemImage.create(cb.resources.play_button, cb.resources.play_button_selected, 'play', this);
+        var playMenuItem = cc.MenuItemImage.create(cb.resources.images.play_button, cb.resources.images.play_button_selected, 'play', this);
         playMenuItem.setPosition(cc.p(-95, -190));
         menu.addChild(playMenuItem);
 
-        var rateMenuItem = cc.MenuItemImage.create(cb.resources.rate_button, cb.resources.rate_button_selected, 'rate', this);
+        var rateMenuItem = cc.MenuItemImage.create(cb.resources.images.rate_button, cb.resources.images.rate_button_selected, 'rate', this);
         rateMenuItem.setPosition(cc.p(0, -90));
         menu.addChild(rateMenuItem);
 
-        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.leaderboard_button, cb.resources.leaderboard_button_selected, 'showLeaderboard', this);
+        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.images.leaderboard_button, cb.resources.images.leaderboard_button_selected, 'showLeaderboard', this);
         leaderboardMenuItem.setPosition(cc.p(95, -190));
         menu.addChild(leaderboardMenuItem);
     },

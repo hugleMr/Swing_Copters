@@ -14,19 +14,19 @@ cb.GameScene = cc.Layer.extend({
     },
 
     _initializeBackground:function(backgroundId) {
-        var backgroundSprite = cc.Sprite.create(cb.resources.backgrounds[backgroundId || 0]);
+        var backgroundSprite = cc.Sprite.create(cb.resources.images.backgrounds[backgroundId || 0]);
         backgroundSprite.setPosition(cc.p(this.getContentSize().width / 2,
             this.getContentSize().height / 2));
         this._backgroundLayer.addChild(backgroundSprite);
     },
 
     _initializeGrounds:function() {
-        this._buildingsSprite = cc.Sprite.create(cb.resources.buildings);
+        this._buildingsSprite = cc.Sprite.create(cb.resources.images.buildings);
         this._buildingsSprite.setPosition(cc.p(this.getContentSize().width / 2,
             this._buildingsSprite.getContentSize().height / 2));
         this._scrollLayer.addChild(this._buildingsSprite);
 
-        this._groundSprite = cc.Sprite.create(cb.resources.ground);
+        this._groundSprite = cc.Sprite.create(cb.resources.images.ground);
         this._groundSprite.setPosition(cc.p(this.getContentSize().width / 2,
             this._groundSprite.getContentSize().height / 2));
         this._scrollLayer.addChild(this._groundSprite);
@@ -39,7 +39,7 @@ cb.GameScene = cc.Layer.extend({
 
         var cloudSprites = [];
         for (var i = 0; i < cloudYPositions.length; i++) {
-            var cloudSprite = cc.Sprite.create(cb.resources.clouds[cloudId || 0]);
+            var cloudSprite = cc.Sprite.create(cb.resources.images.clouds[cloudId || 0]);
             cloudSprite.setZOrder(0);
             cloudSprite.setPosition(cc.p(cloudXPositions[i % 2], cloudYPositions[i]));
             this._scrollLayer.addChild(cloudSprite);

@@ -11,7 +11,7 @@ cb.ScoreBoard = cc.Node.extend({
     },
 
     _createBackgroundSprite:function() {
-        var backgroundSprite = cc.Sprite.create(cb.resources.score_board_bg);
+        var backgroundSprite = cc.Sprite.create(cb.resources.images.score_board_bg);
         this.addChild(backgroundSprite);
     },
 
@@ -63,7 +63,7 @@ cb.ScoreBoard = cc.Node.extend({
     },
 
     _highlightNewHighScore:function() {
-        var highlightNewSprite = cc.Sprite.create(cb.resources.new_high_score);
+        var highlightNewSprite = cc.Sprite.create(cb.resources.images.new_high_score);
         this.addChild(highlightNewSprite);
         highlightNewSprite.setPosition(cc.p(57, -12))
 

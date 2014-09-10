@@ -8,7 +8,7 @@ cb.PlayScene.State.GameOver = cb.PlayScene.State.extend({
     },
 
     _animateShowGameOver:function() {
-        var gameOverSprite = cc.Sprite.create(cb.resources.game_over);
+        var gameOverSprite = cc.Sprite.create(cb.resources.images.game_over);
         this._playScene.addChild(gameOverSprite);
 
         var animationActions = [];
@@ -47,15 +47,15 @@ cb.PlayScene.State.GameOver = cb.PlayScene.State.extend({
         var menu = new cc.Menu();
         this._playScene.addChild(menu);
 
-        var replayMenuItem = cc.MenuItemImage.create(cb.resources.play_button, cb.resources.play_button_selected, 'replay', this);
+        var replayMenuItem = cc.MenuItemImage.create(cb.resources.images.play_button, cb.resources.images.play_button_selected, 'replay', this);
         replayMenuItem.setPosition(cc.p(-95, -190));
         menu.addChild(replayMenuItem);
 
-        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.leaderboard_button, cb.resources.leaderboard_button_selected, 'showLeaderboard', this);
+        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.images.leaderboard_button, cb.resources.images.leaderboard_button_selected, 'showLeaderboard', this);
         leaderboardMenuItem.setPosition(cc.p(95, -190));
         menu.addChild(leaderboardMenuItem);
 
-        var backMenuItem = cc.MenuItemImage.create(cb.resources.back_button, cb.resources.back_button_selected, 'back', this);
+        var backMenuItem = cc.MenuItemImage.create(cb.resources.images.back_button, cb.resources.images.back_button_selected, 'back', this);
         backMenuItem.setPosition(cc.p(-this._playScene.getContentSize().width/2 + backMenuItem.getContentSize().width/2, 140));
         menu.addChild(backMenuItem);
     },
