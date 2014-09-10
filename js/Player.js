@@ -47,6 +47,8 @@ cb.Player = cc.Node.extend(cb.SimplePhysicsBodyImpl()).extend({
         var acceleration = this.getAcceleration();
         acceleration.x *= -1;
         this.setAcceleration(acceleration);
+
+        cc.audioEngine.playEffect(cb.resources.sound.flip_sfx_mp3);
     },
 
     update:function(dt) {
@@ -100,12 +102,16 @@ cb.Player.State.Idle = cb.Player.State.extend({
 });
 
 cb.Player.State.Flying = cb.Player.State.extend({
+    fanSoundSFXId : null,
+
     onEnter:function() {
         this._animatePlayerSprite();
         this._animateCopterSprite();
 
         this._player.setVelocity(cc.p(0, 0));
         this._player.setAcceleration(cc.p(cb.Config.COPTER_X_ACCELERATION, 0));
+
+        this.fanSoundSFXId = cc.audioEngine.playEffect(cb.resources.sound.fan_sfx_mp3, true);
     },
 
     _animatePlayerSprite:function() {
@@ -128,6 +134,8 @@ cb.Player.State.Flying = cb.Player.State.extend({
 
         this._player.setVelocity(cc.p(0, 0));
         this._player.setAcceleration(cc.p(0, 0));
+
+        cc.audioEngine.stopEffect(this.fanSoundSFXId);
     }
 });
 
@@ -137,8 +145,6 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
     var copterWingRotateDuration = 0.5;
     var copterWingInitialVelocity = cc.p(250, 250);
     var copterWingGravity = cc.p(0, -10);
-
-    cb.SimplePhysicsSprite = cc.Sprite.extend(cb.SimplePhysicsBodyImpl());
 
     return {
         _brokenCopterWingSprites : null,
@@ -153,6 +159,8 @@ cb.Player.State.Falling = cb.Player.State.extend((function() {
         onEnter:function() {
             this._animatePlayerSprite();
             this._animateCopterSprite();
+
+            cc.audioEngine.playEffect(cb.resources.sound.die_sfx_mp3);
         },
 
         _animatePlayerSprite:function() {

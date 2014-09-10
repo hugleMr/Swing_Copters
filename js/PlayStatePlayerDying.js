@@ -8,6 +8,7 @@ cb.PlayScene.State.PlayerDying = cb.PlayScene.State.extend({
 
     onExit:function() {
         this._playScene.scheduleUpdate();
+        cc.audioEngine.playEffect(cb.resources.sound.hit_sfx_mp3);
     },
 
     _setUpFallingGround:function() {

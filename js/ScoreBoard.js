@@ -46,6 +46,7 @@ cb.ScoreBoard = cc.Node.extend({
             }
             else {
                 this._scoreSprite.setScore(this._scoreSprite.getScore() + 1);
+                cc.audioEngine.playEffect(cb.resources.sound.scoreboard_score_sfx_mp3);
                 this.runAction(cc.Sequence.create([ cc.DelayTime.create(updateInterval),
                                                     cc.CallFunc.create(animationUpdate, this) ]));
             }
@@ -86,5 +87,6 @@ cb.ScoreBoard = cc.Node.extend({
 
         medal.setScale(1.2);
         medal.runAction(cc.Sequence.create(animationActions));
+        cc.audioEngine.playEffect(cb.resources.sound.scoreboard_medal_sfx_mp3);
     }
 });

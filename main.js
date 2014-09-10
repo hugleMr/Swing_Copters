@@ -1,8 +1,9 @@
 var cb = {};
 
 cb.resources = {};
-
 cb.resources.images = {};
+cb.resources.sound = {};
+
 cb.resources.images.backgrounds = [ "bg_01", "bg_02", "bg_03" ];
 cb.resources.images.clouds = [ "cloud_01", "cloud_02", "cloud_03" ];
 cb.resources.images.buildings = "buildings";
@@ -50,11 +51,41 @@ cb.resources.images.sparkle_particle_03 = "sparkle_particle_03";
         else {
             images[name] = "#" + images[name];
         }
-}());
+})();
 
 cb.resources.images.score_small_suffix = "_small";
 cb.resources.images.atlas = "images/atlas.png";
 cb.resources.images.atlas_plist = "images/atlas.plist";
+
+cb.resources.sound.button_sfx_mp3 = "coin_sfx.mp3";
+cb.resources.sound.button_sfx_ogg = "coin_sfx.ogg";
+cb.resources.sound.score_sfx_mp3 = "score_sfx.mp3";
+cb.resources.sound.score_sfx_ogg = "score_sfx.ogg";
+cb.resources.sound.flip_sfx_mp3 = "flip_sfx.mp3";
+cb.resources.sound.flip_sfx_ogg = "flip_sfx.ogg";
+cb.resources.sound.fan_sfx_mp3 = "fan_sfx.mp3";
+cb.resources.sound.fan_sfx_ogg = "fan_sfx.ogg";
+cb.resources.sound.hit_sfx_mp3 = "hit_sfx.mp3";
+cb.resources.sound.hit_sfx_ogg = "hit_sfx.ogg";
+cb.resources.sound.die_sfx_mp3 = "die_sfx.mp3";
+cb.resources.sound.die_sfx_ogg = "die_sfx.ogg";
+cb.resources.sound.scoreboard_score_sfx_mp3 = "coin_sfx.mp3";
+cb.resources.sound.scoreboard_score_sfx_ogg = "coin_sfx.ogg";
+cb.resources.sound.scoreboard_medal_sfx_mp3 = "score_sfx.mp3";
+cb.resources.sound.scoreboard_medal_sfx_ogg = "score_sfx.ogg";
+
+(function() {
+    var sound = cb.resources.sound;
+
+    var soundFolder = "sound/";
+    for (var name in sound)
+        sound[name] = soundFolder + sound[name];
+
+    var allSound = [];
+    for (var name in sound)
+        allSound.push(sound[name]);
+    sound.all = allSound;
+})();
 
 window.onload = function(){
     function createCanvas(id, width, height) {
@@ -93,7 +124,7 @@ window.onload = function(){
         }
 
         //load resources
-        cc.LoaderScene.preload([cb.resources.images.atlas_plist, cb.resources.images.atlas], function () {
+        cc.LoaderScene.preload([cb.resources.images.atlas_plist, cb.resources.images.atlas].concat(cb.resources.sound.all), function () {
             cc.spriteFrameCache.addSpriteFrames(cb.resources.images.atlas_plist, cb.resources.images.atlas);
 
             cc.director.runScene(cb.MainMenuScene.create());

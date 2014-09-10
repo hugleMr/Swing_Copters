@@ -114,6 +114,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
     },
 
     _handlePlayerDead:function() {
+        cc.audioEngine.playEffect(cb.resources.sound.hit_sfx_mp3);
         this._playScene.unscheduleUpdate();
         this._playScene.setState(new cb.PlayScene.State.PlayerDying(this._playScene));
     },
@@ -129,6 +130,7 @@ cb.PlayScene.State.Playing = cb.PlayScene.State.extend({
         if (shouldUpdateScore) {
             this._unscoredObstacles.splice(0, 1);
             this._playScene._incrementScore();
+            cc.audioEngine.playEffect(cb.resources.sound.score_sfx_mp3);
         }
     },
 

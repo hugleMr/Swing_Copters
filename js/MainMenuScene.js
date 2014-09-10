@@ -33,15 +33,15 @@ cb.MainMenuScene = cb.GameScene.extend({
         var menu = new cc.Menu();
         this.addChild(menu);
 
-        var playMenuItem = cc.MenuItemImage.create(cb.resources.images.play_button, cb.resources.images.play_button_selected, 'play', this);
+        var playMenuItem = cb.MenuItemImage.create(cb.resources.images.play_button, cb.resources.images.play_button_selected, 'play', this);
         playMenuItem.setPosition(cc.p(-95, -190));
         menu.addChild(playMenuItem);
 
-        var rateMenuItem = cc.MenuItemImage.create(cb.resources.images.rate_button, cb.resources.images.rate_button_selected, 'rate', this);
+        var rateMenuItem = cb.MenuItemImage.create(cb.resources.images.rate_button, cb.resources.images.rate_button_selected, 'rate', this);
         rateMenuItem.setPosition(cc.p(0, -90));
         menu.addChild(rateMenuItem);
 
-        var leaderboardMenuItem = cc.MenuItemImage.create(cb.resources.images.leaderboard_button, cb.resources.images.leaderboard_button_selected, 'showLeaderboard', this);
+        var leaderboardMenuItem = cb.MenuItemImage.create(cb.resources.images.leaderboard_button, cb.resources.images.leaderboard_button_selected, 'showLeaderboard', this);
         leaderboardMenuItem.setPosition(cc.p(95, -190));
         menu.addChild(leaderboardMenuItem);
     },

@@ -36,3 +36,5 @@ cb.SimplePhysicsBodyImpl = function() {
         }
     }
 };
+
+cb.SimplePhysicsSprite = cc.Sprite.extend(cb.SimplePhysicsBodyImpl());
